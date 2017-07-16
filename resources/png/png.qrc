@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>P1-STARTmini.png</file>
+        <file>P1-SETmini.png</file>
+        <file>P1-PROGmini.png</file>
+        <file>P1-MANUmini.png</file>
+        <file>P1-HELPmini.png</file>
+        <file>P1-EDITmini.png</file>
+        <file>P2-UP.png</file>
+        <file>P2-DOWN.png</file>
+        <file>P1-START.png</file>
+        <file>P1-SET.png</file>
+        <file>P1-PROG.png</file>
+        <file>P1-MOLD.png</file>
+        <file>P1-MANU.png</file>
+        <file>P1-HELP.png</file>
+        <file>P1-FLASH.png</file>
+        <file>P1-EDIT.png</file>
+    </qresource>
+</RCC>

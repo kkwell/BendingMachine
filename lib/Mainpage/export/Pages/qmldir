@@ -1,0 +1,3 @@
+module Pages
+Mainpage 1.0 Mainpage.qml
+plugin qmainpageplugin

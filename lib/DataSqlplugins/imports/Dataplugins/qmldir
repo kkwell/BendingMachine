@@ -1,0 +1,3 @@
+module Dataplugins
+Datasql 1.0 Data.qml
+plugin datasqlplugins

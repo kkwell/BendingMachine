@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/png">
+        <file>export/Pages/images/diag.png</file>
+        <file>export/Pages/images/jichuangcanshu.png</file>
+        <file>export/Pages/images/moju.png</file>
+        <file>export/Pages/images/positionchange.png</file>
+        <file>export/Pages/images/programlist.png</file>
+        <file>export/Pages/images/shujuchuanshu.png</file>
+        <file>export/Pages/images/user.png</file>
+        <file>export/Pages/images/xitongguanli.png</file>
+    </qresource>
+</RCC>
