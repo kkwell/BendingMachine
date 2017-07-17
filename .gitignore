@@ -1,8 +1,12 @@
-# C++ objects and libs
+### C++ ###
+# Prerequisites
+*.d
 
+# Compiled Object files
 *.slo
 *.lo
 *.o
+*.obj
 *.a
 *.la
 *.lai
@@ -10,17 +14,28 @@
 *.dll
 *.dylib
 
+# Precompiled Headers
+*.gch
+*.pch
+
+# Fortran module files
+*.mod
+*.smod
+
+
+### Qt ###
+
 # Qt-es
 
 /.qmake.cache
 /.qmake.stash
-.qmake.stash
 *.pro.user
 *.pro.user.*
 *.qbs.user
 *.qbs.user.*
 *.moc
 moc_*.cpp
+moc_*.h
 qrc_*.cpp
 ui_*.h
 Makefile*
@@ -33,7 +48,12 @@ Makefile*
 # QtCtreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
+*.qmlc
 
 # QtCtreator CMake
 CMakeLists.txt.user*
+
+### macOS ###
+BendingMachine.app
+*.DS_Store
 
