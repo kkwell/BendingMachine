@@ -79,7 +79,7 @@ Rectangle {
             height: 60
             color:"#f2f1f0"
             Text{
-                text:"产品库"
+                text:"工序"
                 font.pixelSize: 25
                 x:20
                 y:20
@@ -93,13 +93,13 @@ Rectangle {
                 width: parent.width-80
                 height: parent.height
                 //color:"black"//"#f2f1f0"
-                Datalist{
-                    //visible: p_page===0?true:false
+//                Datalist{
+//                    //visible: p_page===0?true:false
 
-                }
-//                Datasteplist{
-//                    visible: p_page===0?false:true
 //                }
+                Datasteplist{
+                    //visible: p_page===0?false:true
+                }
             }
             Rectangle{
                 width: 80

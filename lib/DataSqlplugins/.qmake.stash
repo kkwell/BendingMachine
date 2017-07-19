@@ -1,0 +1,18 @@
+QMAKE_DEFAULT_INCDIRS = \
+    /opt/tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/arm-linux-gnueabihf/include/c++/4.8.3 \
+    /opt/tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/arm-linux-gnueabihf/include/c++/4.8.3/arm-linux-gnueabihf \
+    /opt/tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/arm-linux-gnueabihf/include/c++/4.8.3/backward \
+    /opt/tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/lib/gcc/arm-linux-gnueabihf/4.8.3/include \
+    /opt/tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/lib/gcc/arm-linux-gnueabihf/4.8.3/include-fixed \
+    /opt/tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/arm-linux-gnueabihf/include \
+    /media/root/b105f9a8-f450-4976-8ac8-69053f57bab4/usr/include \
+    /media/root/b105f9a8-f450-4976-8ac8-69053f57bab4/usr/include/arm-linux-gnueabihf
+QMAKE_DEFAULT_LIBDIRS = \
+    /opt/tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/lib/gcc/arm-linux-gnueabihf/4.8.3 \
+    /opt/tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/lib/gcc/arm-linux-gnueabihf \
+    /opt/tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/lib/gcc \
+    /opt/tools-master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/arm-linux-gnueabihf/lib \
+    /media/root/b105f9a8-f450-4976-8ac8-69053f57bab4/lib/arm-linux-gnueabihf \
+    /media/root/b105f9a8-f450-4976-8ac8-69053f57bab4/lib \
+    /media/root/b105f9a8-f450-4976-8ac8-69053f57bab4/usr/lib/arm-linux-gnueabihf \
+    /media/root/b105f9a8-f450-4976-8ac8-69053f57bab4/usr/lib

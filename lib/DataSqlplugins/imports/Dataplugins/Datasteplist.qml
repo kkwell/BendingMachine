@@ -9,13 +9,15 @@ Rectangle{
     property int mwidth:920
     ListModel {
         id:headerModel
-        ListElement { name: "工步号";     len:70;  b_id:"header1"  }
-        ListElement { name: "角度";       len:80; b_id:"header2"  }
-        ListElement { name: "校正值";     len:80;  b_id:"header3"  }
-        ListElement { name: "L";     len:80;  b_id:"header4"  }
-        ListElement { name: "X";     len:80;  b_id:"header5"  }
-        ListElement { name: "R";     len:80;  b_id:"header6"  }
-        ListElement { name: "退让距离";     len:80;  b_id:"header7"  }
+        ListElement { name: "工步号";     len:90;  b_id:"header1"  }
+        ListElement { name: "角度";       len:100; b_id:"header2"  }
+        ListElement { name: "校正值";     len:100;  b_id:"header3"  }
+        ListElement { name: "L";        len:100;  b_id:"header4"  }
+        ListElement { name: "X";        len:100;  b_id:"header5"  }
+        ListElement { name: "R";        len:100;  b_id:"header6"  }
+        ListElement { name: "退让距离";   len:100;  b_id:"header7"  }
+        ListElement { name: "Y1";   len:100;  b_id:"header8"  }
+        ListElement { name: "Y2";   len:100;  b_id:"header9"  }
     }
     Component {
         id: swipeDelegateComponent
@@ -30,7 +32,7 @@ Rectangle{
                     anchors.fill: parent
                     spacing: 0
                     Text{
-                        width:70
+                        width:90
                         height: parent.height
                         text:"1"
                         verticalAlignment: Text.AlignVCenter
@@ -38,14 +40,14 @@ Rectangle{
                         font.pixelSize: 16
                     }
                     Text{
-                        width:80
+                        width:100
                         height:parent.height
                         text:"90"
                         font.pixelSize: 16
                         verticalAlignment: Text.AlignVCenter
                     }
                     Text{
-                        width:80
+                        width:100
                         height:parent.height
                         text:"1.5"
                         font.pixelSize: 16
@@ -53,7 +55,7 @@ Rectangle{
                         verticalAlignment: Text.AlignVCenter
                     }
                     Text{
-                        width:80
+                        width:100
                         height:parent.height
                         text:"100"
                         font.pixelSize: 16
@@ -62,7 +64,7 @@ Rectangle{
                     }
 
                     Text{
-                        width:80
+                        width:100
                         height:parent.height
                         text:"110"
                         font.pixelSize: 16
@@ -71,7 +73,7 @@ Rectangle{
                     }
 
                     Text{
-                        width:80//repeater.itemAt(3).width
+                        width:100//repeater.itemAt(3).width
                         height:parent.height
                         text:"20"
                         font.pixelSize: 16
@@ -80,9 +82,25 @@ Rectangle{
                     }
 
                     Text{
-                        width:80//repeater.itemAt(3).width
+                        width:100//repeater.itemAt(3).width
                         height:parent.height
                         text:"180"
+                        font.pixelSize: 16
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    Text{
+                        width:100//repeater.itemAt(3).width
+                        height:parent.height
+                        text:"200"
+                        font.pixelSize: 16
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    Text{
+                        width:100//repeater.itemAt(3).width
+                        height:parent.height
+                        text:"300"
                         font.pixelSize: 16
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
@@ -124,7 +142,7 @@ Rectangle{
         id:topRow
         width:mwidth
         height: 37
-        x:15
+        x:25
         Repeater {
             id:repeater
             model:headerModel
@@ -145,14 +163,14 @@ Rectangle{
         //spacing: 0
         width: 920
         height: parent.height
-        x:15
+        x:25
         anchors.top: topRow.bottom
         //        anchors.fill: parent
         //        anchors.leftMargin: 15
         ListView {
             id: listView
-            width: 550
-            height: 180
+            width: 890
+            height: 240
             //            Layout.fillWidth: true
             //            Layout.fillHeight: true
             clip: true
@@ -220,15 +238,16 @@ Rectangle{
         Text {
             width:100
             height: 50
+            //x:20
             text:"工 步 参 数"
             font.pixelSize: 23
             //font.bold: true
-            horizontalAlignment: Text.AlignHCenter
+            //horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
 
             Grid {
-                x:150
+                x:120
                 y:30
                 width: parent.width
                 height: parent.height-listView.height-30
@@ -241,21 +260,21 @@ Rectangle{
                 Repeater {
                     id:lrepeater
                     model:ListModel{
-                    ListElement { name: "角 度";     len:70  }
-                    ListElement { name: "L";     len:200 }
-                    ListElement { name: "角度校正";     len:45  }
-                    ListElement { name: "X";     len:45  }
-                    ListElement { name: "Y1";     len:45  }
-                    ListElement { name: "X校正";   len:45  }
-                    ListElement { name: "Y2";     len:45  }
-                    ListElement { name: "R";   len:45  }
-                    ListElement { name: "压 力";         len:45  }
-                    ListElement { name: "R校正";    len:45  }
-                    ListElement { name: "补 偿";    len:45  }
-                    ListElement { name: "退让距离";    len:45  }
+                    ListElement { name: "角 度";     len:70  ;test:"90"}
+                    ListElement { name: "L";     len:200 ;test:"200"}
+                    ListElement { name: "角度校正";     len:45  ;test:"1.2"}
+                    ListElement { name: "X";     len:45  ;test:"130"}
+                    ListElement { name: "Y1";     len:45  ;test:"30"}
+                    ListElement { name: "X校正";   len:45  ;test:"0"}
+                    ListElement { name: "Y2";     len:45  ;test:"60"}
+                    ListElement { name: "R";   len:45  ;test:"10"}
+                    ListElement { name: "压 力";    len:45  ;test:"103"}
+                    ListElement { name: "R校正";    len:45  ;test:"1"}
+                    ListElement { name: "补 偿";    len:45  ;test:"0"}
+                    ListElement { name: "退让距离";    len:45  ;test:"50"}
                     }
                     Rectangle{
-                        width:160
+                        width:300
                         height:30
                         color:mpane.color
                         Label {
@@ -269,11 +288,19 @@ Rectangle{
                             //font.bold: true
                         }
                         TextField {
+                            id:textname
                             width: 100
                             height: 35
                             placeholderText: "TextField"
                             //anchors.horizontalCenter: parent.horizontalCenter
                             anchors.left: firstname.right
+                        }
+                        Label{
+                            width:100
+                            height:35
+                            anchors.left: textname.right
+                            text:"   = "+test
+                            font.pixelSize: 20
                         }
 
                     }

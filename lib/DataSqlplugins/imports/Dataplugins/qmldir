@@ -1,3 +1,4 @@
 module Dataplugins
 Datasql 1.0 Data.qml
+Datasqlstep 1.0 Datastep.qml
 plugin datasqlplugins

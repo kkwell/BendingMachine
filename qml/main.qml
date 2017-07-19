@@ -8,6 +8,7 @@ import "qrc:/MaterialUI/Interface/"
 import QtQuick.Controls.Material 2.0
 import Qt.labs.settings 1.0
 import Dataplugins 1.0
+import Startplugins 1.0
 
 ApplicationWindow {
     id: root
@@ -20,12 +21,20 @@ ApplicationWindow {
     property int mtheme:Material.Light
     property int maccent:Material.LightBlue//Material.Grey//Material.Cyan
     property int mprimary:Material.Grey//Material.Cyan
-    property int ourIndex:0
+    //property int ourIndex:0
 
     Material.theme: mtheme
     Material.accent: maccent//Material.Cyan
     Material.primary:mprimary//Material.Cyan
-
+    Image {
+        id: xx
+        source: "logo.png"
+        width:313
+        height:50
+        x:700
+        y:7
+        z:1
+    }
     function log(message) {
         console.log(message);
     }
@@ -38,32 +47,45 @@ ApplicationWindow {
         id: stackView
         width:parent.width
         height:parent.height-toolbar.height
-        initialItem: data_page//"qrc:/menulist.qml"
+        initialItem: data_page//data_page//"qrc:/menulist.qml"
     }
 
     Component{
         id:data_page
         Datasql {
+            id:data_page_sql
             p_width:stackView.width
             p_height:stackView.height
-            p_page:ourIndex
+            //ggp:data.idData
             Data {
                 id: data
             }
+            ggp:data.idData
         }
     }
-    //    Component{
-    //        id:datastep_page
-    //        Datasqlstep{
-    //            p_width:stackView.width
-    //            p_height:stackView.height
-    //            //p_width:stackView.width
-    //            //p_height:stackView.height
-    //            Data{
+    Component{
+        id:datastep_page
+        Datasqlstep{
+            p_width:stackView.width
+            p_height:stackView.height
+//            Data{
 
-    //            }
-    //        }
-    //    }
+//            }
+        }
+    }
+    Component{
+        id:start_page
+        StartBend { // this class is defined in QML
+
+            Start { // this class is defined in C++ (plugin.cpp)
+                id: start
+            }
+
+            p_width:stackView.width
+            p_height:stackView.height
+
+        }
+    }
 
     //    MaterialButton {
     //        width: parent.width
@@ -107,17 +129,16 @@ ApplicationWindow {
                 id:mrep
                 model: ListModel {
                     id: listModel
-                    ListElement { title: "产品库";   source: "P1-PROGmini.png";state:''}
-                    ListElement { title: "工序";   source: "P1-EDITmini.png" ;state:''}
+                    ListElement { title: "产品库";   source: "Product_documentation.png";state:''}
+                    ListElement { title: "工序";   source: "build.png" ;state:''}
                     ListElement { title: "全自动"; source: "P1-STARTmini.png" ;state:''}
                     ListElement { title: "半自动";   source: "P1-MANUmini.png" ;state:''}
-                    ListElement { title: "手动";   source: "P1-MANUmini.png" ;state:''}
-                    ListElement { title: "模具";   source: "P1-SETmini.png" ;state:''}
-                    ListElement { title: "参数设置";   source: "P1-PROGmini.png" ;state:''}
-                    ListElement { title: "权限";   source: "P1-EDITmini.png" ;state:''}
+                    ListElement { title: "手动";   source: "hand_pointer.png" ;state:''}
+                    ListElement { title: "模具";   source: "mould_tool.png" ;state:''}
+                    ListElement { title: "参数设置";   source: "set_system.png" ;state:''}
+                    ListElement { title: "权限";   source: "add_user_group.png" ;state:''}
                     ListElement { title: "帮助";   source: "P1-HELPmini.png" ;state:''}
                 }
-
 
                 Rectangle{
                     id:titleRect
@@ -158,22 +179,20 @@ ApplicationWindow {
 
                         //onPressed: state='clicked'
                         onClicked: {
-                            //mrep.itemAt(index).state=''
                             if(mrep.itemAt(index).state!=='clicked'){
                                 mrep.itemAt(index).state='clicked'
                                 log(index)
-//                                if(-1<index<9){
-//                                    mrep.itemAt(index).state=''
-//                                }
-
                                 for(var i=0; i<9; ++i){
                                     if(i!==index){
-                                           mrep.itemAt(i).state=''
+                                        mrep.itemAt(i).state=''
                                     }
-                                       }
+                                }
                                 switch(index){
-                                case 0:
-                                case 1:ourIndex = index;return stackView.replace(data_page)
+                                case 0:return stackView.replace(data_page)
+                                case 1:return stackView.replace(datastep_page)
+                                case 2:return stackView.replace(start_page)
+
+                                default:materialUI.showSnackbarMessage( "此功能暂未开放" );
                                 }
                             }
 
@@ -223,7 +242,7 @@ ApplicationWindow {
         z: 2
         //anchors.fill: parent
         anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter:parent.horizontalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
         anchors.horizontalCenterOffset: -170
         dialogCancelText: "取消"
         dialogOKText: "确定"

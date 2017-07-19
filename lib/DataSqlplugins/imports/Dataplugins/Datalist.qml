@@ -1,12 +1,13 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.0
-
+import Dataplugins 1.0
 Rectangle{
     id:mpane
     anchors.fill: parent
     color: "#f2f1f0"
     property int mwidth:920
+
     ListModel {
         id:headerModel
         ListElement { name: "序号";     len:70;  b_id:"header1"  }
@@ -188,7 +189,7 @@ Rectangle{
         ListView {
             id: listView
             width: parent.width
-            height: 180
+            height: 240
             //            Layout.fillWidth: true
             //            Layout.fillHeight: true
             clip: true
@@ -255,11 +256,12 @@ Rectangle{
         }
         Text {
             width:100
-            height: 50
+            height: 70
             text:"参   数"
             font.pixelSize: 23
+
             //font.bold: true
-            horizontalAlignment: Text.AlignHCenter
+            //horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
 
@@ -270,45 +272,53 @@ Rectangle{
                 height: parent.height-listView.height-30
                 columnSpacing: 150
                 rowSpacing: 20
-                //anchors.horizontalCenter: parent.horizontalCenter
-                rows:5
+                rows: 5
                 columns: 2
 
                 Repeater {
                     id:lrepeater
                     model:ListModel{
-                    ListElement { name: "名 称";     len:70  }
-                    ListElement { name: "上 模";     len:200 }
-                    ListElement { name: "板 宽";     len:45  }
-                    ListElement { name: "下 模";     len:45  }
-                    ListElement { name: "板 厚";     len:45  }
-                    ListElement { name: "上死点";   len:45  }
-                    ListElement { name: "材 料";     len:45  }
-                    ListElement { name: "转速点";   len:45  }
-                    ListElement { name: "";         len:45  }
-                    ListElement { name: "夹紧点";    len:45  }
+                    ListElement { name: "名 称";     len:70  ;test:"FiresBending"}
+                    ListElement { name: "上 模";     len:200 ;test:"bn-5"}
+                    ListElement { name: "板 宽";     len:45  ;test:"300"}
+                    ListElement { name: "下 模";     len:45  ;test:"xn-7"}
+                    ListElement { name: "板 厚";     len:45  ;test:"5"}
+                    ListElement { name: "上死点";   len:45  ;test:"100"}
+                    ListElement { name: "材 料";     len:45  ;test:"铝合金"}
+                    ListElement { name: "转速点";   len:45  ;test:"200"}
+                    //ListElement { name: "";         len:45  }
+                    ListElement { name: "夹紧点";    len:45  ;test:"300"}
                     }
                     Rectangle{
-                        width:160
+                        width:300
                         height:30
                         color:mpane.color
-                        Label {
-                            id:firstname
-                            width: 65
-                            y:5
-                            //wrapMode: Label.Wrap
-                            //horizontalAlignment: Qt.AlignHCenter
-                            text: name
-                            font.pixelSize: 18
-                            //font.bold: true
-                        }
-                        TextField {
-                            width: 100
-                            height: 35
-                            placeholderText: "TextField"
-                            //anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.left: firstname.right
-                        }
+                            Label {
+                                id:firstname
+                                width: 65
+                                y:5
+                                //wrapMode: Label.Wrap
+                                //horizontalAlignment: Qt.AlignHCenter
+                                text: name
+                                font.pixelSize: 18
+                                //font.bold: true
+                            }
+                            TextField {
+                                id:textname
+                                width: 100
+                                height: 35
+                                placeholderText: "TextField"
+                                //anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.left: firstname.right
+                            }
+                            Label{
+                                width:100
+                                height:35
+                                text:"   = "+test
+                                font.pixelSize: 18
+                                anchors.left: textname.right
+                            }
+
 
                     }
 

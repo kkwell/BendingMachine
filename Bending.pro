@@ -27,7 +27,7 @@ RESOURCES += \
     resources/png/png.qrc
 
 QML_IMPORT_PATH += $$PWD/lib/DataSqlplugins/imports/Dataplugins \
-                   $$PWD/lib/Programpage/export/Programpages
+                   $$PWD/lib/Startplugins/imports/Startplugins
                    #$$PWD/../../DrawdesignsPage/export/Drawdesignspages\
                    #$$PWD/../../Mouldpage/export/Mouldpages
                    #/lib/qmllib/TimeExample
@@ -35,4 +35,5 @@ QML_IMPORT_PATH += $$PWD/lib/DataSqlplugins/imports/Dataplugins \
 #LIBS += -L QML_IMPORT_PATH
 
 target.path += $$PWD/
+#target.path += /mnt/hgfs/BendingMachine/
 INSTALLS += target

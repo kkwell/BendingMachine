@@ -16,5 +16,13 @@
         <file>P1-HELP.png</file>
         <file>P1-FLASH.png</file>
         <file>P1-EDIT.png</file>
+        <file>logo.png</file>
+        <file>set_system.png</file>
+        <file>Product_documentation.png</file>
+        <file>mould_tool.png</file>
+        <file>hand_pointer.png</file>
+        <file>button_begin.png</file>
+        <file>build.png</file>
+        <file>add_user_group.png</file>
     </qresource>
 </RCC>

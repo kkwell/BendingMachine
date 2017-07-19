@@ -1,11 +1,15 @@
 TEMPLATE = lib
 CONFIG += plugin
-QT += qml
+QT += qml \
+      sql
 
 DESTDIR = imports/Dataplugins
 TARGET  = datasqlplugins
 
-SOURCES += cpp/plugin.cpp
+HEADERS += \
+    cpp/plugin.h
+SOURCES += \
+    cpp/plugin.cpp
 
 pluginfiles.files += \
     imports/Dataplugins/qmldir \
@@ -13,6 +17,7 @@ pluginfiles.files += \
     imports/Dataplugins/Datalist.qml \
     imports/Dataplugins/Datastep.qml \
     imports/Dataplugins/Datasteplist.qml
+
 qml.files = plugins.qml
 qml.path += $$PWD/
 target.path += $$PWD/imports/Dataplugins

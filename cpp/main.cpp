@@ -33,14 +33,15 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_MACOS
     qDebug()<<"system:MACOS";
     engine.addImportPath("../../../lib/DataSqlplugins/imports/");
-    //       engine.addImportPath("../../Mouldpage/export/");
-    //       engine.addImportPath("../../DrawdesignsPage/export/");
+    engine.addImportPath("../../../lib/Startplugins/imports/");
 #elif defined(Q_OS_LINUX)
     qDebug()<<"system:LINUX";
-    engine.addImportPath("$$PWD/lib/DataSqlplugins/imports/");
+    engine.addImportPath("./lib/DataSqlplugins/imports/");
+    engine.addImportPath("./lib/Startplugins/imports/");
 #elif defined(Q_OS_WIN)
     qDebug()<<"system:WIN";
-    engine.addImportPath("$$PWD/lib/DataSqlplugins/imports/");
+    engine.addImportPath("./lib/DataSqlplugins/imports/");
+    engine.addImportPath("./lib/Startplugins/imports/");
 #endif
 
     engine.load(QUrl("qrc:/main.qml"));

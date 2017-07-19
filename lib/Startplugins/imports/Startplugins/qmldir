@@ -1,0 +1,3 @@
+module Startplugins
+StartBend 1.0 StartBending.qml
+plugin startplugins

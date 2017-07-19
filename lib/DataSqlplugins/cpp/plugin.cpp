@@ -38,104 +38,264 @@
 **
 ****************************************************************************/
 
-#include <QtQml/QQmlExtensionPlugin>
-#include <QtQml/qqml.h>
-#include <qdebug.h>
-#include <qdatetime.h>
-#include <qbasictimer.h>
-#include <qcoreapplication.h>
+#include "plugin.h"
 
-// Implements a "TimeModel" class with hour and minute properties
-// that change on-the-minute yet efficiently sleep the rest
-// of the time.
 
-class MinuteTimer : public QObject
+bool BendingProgram::opensql()
 {
-    Q_OBJECT
-public:
-    MinuteTimer(QObject *parent) : QObject(parent)
+    //database = QSqlDatabase::addDatabase("QSQLITE");
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+        database = QSqlDatabase::database("qt_sql_default_connection");
+    else
+        database = QSqlDatabase::addDatabase("QSQLITE");
+
+    database.setDatabaseName("BendingDataBase.db");
+    if(database.open())
     {
+        qDebug()<<"Database Opened";
+        return true;
     }
-
-    void start()
+    else
     {
-        if (!timer.isActive()) {
-            time = QTime::currentTime();
-            timer.start(60000-time.second()*1000, this);
-        }
+        qDebug() << "Error: Failed to connect database." << database.lastError();
+        return false;
     }
+}
 
-    void stop()
-    {
-        timer.stop();
-    }
-
-    int hour() const { return time.hour(); }
-    int minute() const { return time.minute(); }
-
-signals:
-    void timeChanged();
-
-protected:
-    void timerEvent(QTimerEvent *)
-    {
-        QTime now = QTime::currentTime();
-        if (now.second() == 59 && now.minute() == time.minute() && now.hour() == time.hour()) {
-            // just missed time tick over, force it, wait extra 0.5 seconds
-            time.addSecs(60);
-            timer.start(60500, this);
-        } else {
-            time = now;
-            timer.start(60000-time.second()*1000, this);
-        }
-        emit timeChanged();
-    }
-
-private:
-    QTime time;
-    QBasicTimer timer;
-};
-
-//![0]
-class TimeModel : public QObject
+int BendingProgram::mathod_sql(QString str)
 {
-    Q_OBJECT
-    Q_PROPERTY(int hour READ hour NOTIFY timeChanged)
-    Q_PROPERTY(int minute READ minute NOTIFY timeChanged)
-//![0]
-
-public:
-    TimeModel(QObject *parent=0) : QObject(parent)
+    database = QSqlDatabase::addDatabase("QSQLITE");
+    database.setDatabaseName("BendingDataBase.db");
+    if(database.open())
     {
-        if (++instances == 1) {
-            if (!timer)
-                timer = new MinuteTimer(QCoreApplication::instance());
-            connect(timer, &MinuteTimer::timeChanged, this, &TimeModel::timeChanged);
-            timer->start();
+        qDebug()<<"Database Opened";
+        QSqlQuery msql_query;
+        sql_query = &msql_query;
+        sql_query->prepare(str);
+        if(!sql_query->exec())
+        {
+            qDebug()<<sql_query->lastError();
+            closesql();
+            return 1;
+        }
+        else
+        {
+            return 0;
+
+        }
+    }
+    else
+    {
+        qDebug() << "Error: Failed to connect database." << database.lastError();
+        return 2;
+    }
+}
+
+bool BendingProgram::createsql()
+{
+    QString create_sql = "create table BendingData (id int primary key,\
+            name varchar(30),\
+            stepnum int,\
+            widthness float,\
+            thickness float,\
+            material varchar(20),\
+            topmould varchar(10),\
+            bottommould varchar(10),\
+            workednum int,\
+            edittime varchar(20),\
+            shangsidian float,\
+            zhuansudian float,\
+            jiajindian float,\
+            enable int)";
+            database = QSqlDatabase::addDatabase("QSQLITE");
+    database.setDatabaseName("BendingDataBase.db");
+    if(database.open())
+    {
+        qDebug()<<"Database Opened";
+    }
+    else
+    {
+        qDebug() << "Error: Failed to connect database." << database.lastError();
+        return false;
+    }
+
+    //QSqlQuery msql_query;
+    QSqlQuery sql_query;//= &msql_query;
+
+    QString insert_sql = "insert into BendingData values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    sql_query.prepare(create_sql);
+    if(!sql_query.exec())
+    {
+        qDebug()<<QObject::tr("Table Create failed");
+        qDebug()<<sql_query.lastError();
+        closesql();
+        return false;
+    }
+    else
+    {
+        qDebug()<< "Table Created" ;
+
+        sql_query.prepare(insert_sql);
+        sql_query.addBindValue(1);
+        sql_query.addBindValue("BendingProgram");
+        sql_query.addBindValue(3);
+        sql_query.addBindValue(3.14);
+        sql_query.addBindValue(5.6577);
+        sql_query.addBindValue("铝制");
+        sql_query.addBindValue("bv-Top");
+        sql_query.addBindValue("xx-Bottom");
+        sql_query.addBindValue(50);
+        sql_query.addBindValue("2017-7-18 10:00");
+        sql_query.addBindValue(100);
+        sql_query.addBindValue(200);
+        sql_query.addBindValue(300);
+        sql_query.addBindValue(1);
+
+        if(!sql_query.exec())//execBatch
+        {
+            qDebug()<<sql_query.lastError();
+            closesql();
+            return false;
+        }
+        else
+        {
+            qDebug()<<"first insert success";
+            closesql();
+            return true;
+        }
+    }
+}
+bool BendingProgram::insertsql()
+{
+    QString insert_sql = "insert into BendingData values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    if(opensql())
+    {
+        QSqlQuery *sql_query = new QSqlQuery;
+        sql_query->prepare(insert_sql);
+        sql_query->addBindValue(2);
+        sql_query->addBindValue("BendingProgram");
+        sql_query->addBindValue(3);
+        sql_query->addBindValue(3.14);
+        sql_query->addBindValue(5.6577);
+        sql_query->addBindValue("铝制");
+        sql_query->addBindValue("bv-Top");
+        sql_query->addBindValue("xx-Bottom");
+        sql_query->addBindValue(50);
+        sql_query->addBindValue("2017-7-18 10:00");
+        sql_query->addBindValue(100);
+        sql_query->addBindValue(200);
+        sql_query->addBindValue(300);
+        sql_query->addBindValue(1);
+        if(!sql_query->exec())
+        {
+            qDebug()<<sql_query->lastError();
+            closesql();
+            return false;
+        }
+        else
+        {
+            qDebug()<<"insertsql success";
+            closesql();
+            return true;
+        }
+    }
+    else
+    {
+        qDebug() << "Error: Failed to connect database." << database.lastError();
+        return false;
+    }
+
+    //    if(R_num>0)
+    //    {
+    //        qDebug()<<"insertsql faile";
+    //        if(R_num==1)
+    //            closesql();
+    //        return false;
+    //    }
+    //    else
+    //    {
+
+    //        qDebug()<<"insertsql success";
+    //        closesql();
+    //        return true;
+    //    }
+}
+
+bool BendingProgram::selectsql()
+{
+    QString select_all_sql = "select * from BendingData order by id";
+    //int R_num = mathod_sql(select_all_sql);
+    if(opensql())
+    {
+        QSqlQuery sql_query;
+        sql_query.prepare(select_all_sql);
+
+        if(!sql_query.exec())
+        {
+            qDebug()<<sql_query.lastError();
+            closesql();
+            return false;
+        }
+        else
+        {
+            while(sql_query.next())
+            {
+                int id = sql_query.value(0).toInt();
+//                QString type = sql_query->value(1).toString();
+//                QString name = sql_query->value(2).toString();
+//                int stepnum = sql_query->value(3).toInt();
+//                QString codetype = sql_query->value(4).toString();
+//                float thickness = sql_query->value(5).toFloat();
+//                QString mould = sql_query->value(6).toString();
+                m_idData+=QString("ID:%1").arg(id);
+                qDebug()<<QString("ID:%1").arg(id);
+            }
+
+            closesql();
+            return true;
         }
     }
 
-    ~TimeModel()
+   return false;
+
+}
+bool BendingProgram::deletesql()
+{
+    QString delete_sql = "delete from BendingData where id=2";
+    int R_num = mathod_sql(delete_sql);
+    if(R_num>0)
     {
-        if (--instances == 0) {
-            timer->stop();
-        }
+        qDebug()<<"BendingData delete failed";
+        return false;
     }
+    else
+    {
+        qDebug()<<"BendingData delete success";
+        closesql();
+        return true;
+    }
+}
 
-    int minute() const { return timer->minute(); }
-    int hour() const { return timer->hour(); }
+void BendingProgram::closesql()
+{
+    database.close();
+    qDebug()<<"stopclose";
+}
 
-signals:
-    void timeChanged();
+QString BendingProgram::getidData()
+{
+    return m_idData;
+}
+void BendingProgram::setidData(QString str)
+{
+    m_idData = str;
+    emit idDataChanged();
+}
 
-private:
-    QTime t;
-    static MinuteTimer *timer;
-    static int instances;
-};
+//signals:
 
-int TimeModel::instances=0;
-MinuteTimer *TimeModel::timer=0;
+
+//protected:
 
 //![plugin]
 class QExampleQmlPlugin : public QQmlExtensionPlugin
@@ -147,9 +307,9 @@ public:
     void registerTypes(const char *uri)
     {
         Q_ASSERT(uri == QLatin1String("Dataplugins"));
-        qmlRegisterType<TimeModel>(uri, 1, 0, "Data");
+        qmlRegisterType<BendingProgram>(uri, 1, 0, "Data");
     }
 };
 //![plugin]
-
+//#include "datasql.moc"
 #include "plugin.moc"
