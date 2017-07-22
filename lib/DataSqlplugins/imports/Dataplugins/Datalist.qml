@@ -30,107 +30,110 @@ Rectangle{
             color: listView.currentIndex==ourIndex?"lightblue":"#ffffff"
             border.color: Qt.lighter(color, 1.1)
 
-                Row{
-                    anchors.fill: parent
-                    spacing: 0
-                    Rectangle{
-                        width: 10
-                        height: 10
-                        x:15
-                        y:10
-                        color: "green"
-                    }
-
-                    Text{
-                        width:60
-                        height: parent.height
-                        text:"10"
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        font.pixelSize: 16
-                    }
-                    Text{
-                        width:200
-                        height:parent.height
-                        text:"Bending Box one"
-                        font.pixelSize: 16
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                    Text{
-                        width:45
-                        height:parent.height
-                        text:"5"
-                        font.pixelSize: 16
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                    Text{
-                        width:75//repeater.itemAt(3).width
-                        height:parent.height
-                        text:"200.00"
-                        font.pixelSize: 16
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-
-                    Text{
-                        width:75//repeater.itemAt(3).width
-                        height:parent.height
-                        text:"5.77"
-                        font.pixelSize: 16
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-
-                    Text{
-                        width:75//repeater.itemAt(3).width
-                        height:parent.height
-                        text:"铝合金"
-                        font.pixelSize: 16
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-
-                    Text{
-                        width:75//repeater.itemAt(3).width
-                        height:parent.height
-                        text:"s-01"
-                        font.pixelSize: 16
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-
-                    Text{
-                        width:75
-                        height:parent.height
-                        text:"xd=3"
-                        font.pixelSize: 16
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                    Text{
-                        width:70
-                        height:parent.height
-                        text:"100"
-                        font.pixelSize: 16
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                    Text{
-                        width:160
-                        height:parent.height
-                        text:"2017/6/26 17:30"
-                        font.pixelSize: 16
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
+            Row{
+                anchors.fill: parent
+                spacing: 0
+                Rectangle{
+                    width: 10
+                    height: 10
+                    x:15
+                    y:10
+                    opacity:jsonData.draw==="1"?1:0
+                    color: "green"
                 }
-                MouseArea {
+
+                Text{
+                    width:60
+                    height: parent.height
+                    text:jsonData.id//"1"
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 16
+                }
+                Text{
+                    width:200
+                    height:parent.height
+                    text:jsonData.name//"Bending Box one"
+                    font.pixelSize: 16
+                    verticalAlignment: Text.AlignVCenter
+                }
+                Text{
+                    width:45
+                    height:parent.height
+                    text:jsonData.stepnum
+                    font.pixelSize: 16
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                Text{
+                    width:75//repeater.itemAt(3).width
+                    height:parent.height
+                    text:jsonData.widthness
+                    font.pixelSize: 16
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                Text{
+                    width:75//repeater.itemAt(3).width
+                    height:parent.height
+                    text:jsonData.thickness
+                    font.pixelSize: 16
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                Text{
+                    width:75//repeater.itemAt(3).width
+                    height:parent.height
+                    text:jsonData.material
+                    font.pixelSize: 16
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                Text{
+                    width:75//repeater.itemAt(3).width
+                    height:parent.height
+                    text:jsonData.topmould
+                    font.pixelSize: 16
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                Text{
+                    width:75
+                    height:parent.height
+                    text:jsonData.bottommould
+                    font.pixelSize: 16
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                Text{
+                    width:70
+                    height:parent.height
+                    text:jsonData.workednum
+                    font.pixelSize: 16
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                Text{
+                    width:160
+                    height:parent.height
+                    text:jsonData.edittime//"2017/6/26 17:30"
+                    font.pixelSize: 16
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
+            MouseArea {
                 anchors.fill: parent
                 onClicked:{listView.currentIndex = ourIndex
-                     console.log(ourIndex);
+                    console.log(ourIndex);
+                    lrepeatermodel.setProperty(ourIndex, "test", jsonData.name)
+                    //lrepeatermodel.setData().test=;
                 }
-                }
+            }
             //}
             //onClicked: if (swipe.complete) view.model.remove(ourIndex)
 
@@ -152,8 +155,8 @@ Rectangle{
                 }
             }
 
-//            swipe.left: removeComponent
-//            swipe.right: removeComponent
+            //            swipe.left: removeComponent
+            //            swipe.right: removeComponent
         }
     }
 
@@ -175,62 +178,33 @@ Rectangle{
             }
         }
     }
-
-
+Data{
+    id:mDatajson
+}
     Column {
         id: column
-        //spacing: 0
         width: 920
         height: parent.height
         x:15
         anchors.top: topRow.bottom
-        //        anchors.fill: parent
-        //        anchors.leftMargin: 15
+
         ListView {
             id: listView
             width: parent.width
             height: 240
-            //            Layout.fillWidth: true
-            //            Layout.fillHeight: true
             clip: true
-            model: ListModel {
-                ListElement { type: "ItemDelegate"; text: "ItemDelegate"}
-                ListElement { type: "ItemDelegate"; text: "ItemDelegate" }
-                ListElement { type: "ItemDelegate"; text: "ItemDelegate" }
-                ListElement { type: "SwipeDelegate"; text: "SwipeDelegate" }
-                ListElement { type: "SwipeDelegate"; text: "SwipeDelegate" }
-                ListElement { type: "SwipeDelegate"; text: "SwipeDelegate" }
-                ListElement { type: "CheckDelegate"; text: "CheckDelegate" }
-                ListElement { type: "CheckDelegate"; text: "CheckDelegate" }
-                ListElement { type: "CheckDelegate"; text: "CheckDelegate" }
-                ListElement { type: "RadioDelegate"; text: "RadioDelegate" }
-                ListElement { type: "RadioDelegate"; text: "RadioDelegate" }
-                ListElement { type: "RadioDelegate"; text: "RadioDelegate" }
-                ListElement { type: "SwitchDelegate"; text: "SwitchDelegate" }
-                ListElement { type: "SwitchDelegate"; text: "SwitchDelegate" }
-                ListElement { type: "SwitchDelegate"; text: "SwitchDelegate" }
-            }
-
-            //                section.property: "type"
-            //                section.delegate: Pane {
-            //                    width: listView.width
-            //                    height: sectionLabel.implicitHeight + 20
-
-            //                    Label {
-            //                        id: sectionLabel
-            //                        text: section
-            //                        anchors.centerIn: parent
-            //                    }
-            //                }
+            model: mDatajson
 
             delegate: Loader {
                 id: delegateLoader
                 width: listView.width
                 sourceComponent: swipeDelegateComponent
 
-                property string labelText: text
+
+                //property string labelText: text
                 property ListView view: listView
                 property int ourIndex: index
+                property var jsonData:json
 
                 // Can't find a way to do this in the SwipeDelegate component itself,
                 // so do it here instead.
@@ -265,70 +239,63 @@ Rectangle{
             verticalAlignment: Text.AlignVCenter
         }
 
-            Grid {
-                x:150
-                y:30
-                width: parent.width
-                height: parent.height-listView.height-30
-                columnSpacing: 150
-                rowSpacing: 20
-                rows: 5
-                columns: 2
+        Grid {
+            x:150
+            y:30
+            width: parent.width
+            height: parent.height-listView.height-30
+            columnSpacing: 150
+            rowSpacing: 20
+            rows: 5
+            columns: 2
 
-                Repeater {
-                    id:lrepeater
-                    model:ListModel{
-                    ListElement { name: "名 称";     len:70  ;test:"FiresBending"}
-                    ListElement { name: "上 模";     len:200 ;test:"bn-5"}
-                    ListElement { name: "板 宽";     len:45  ;test:"300"}
-                    ListElement { name: "下 模";     len:45  ;test:"xn-7"}
-                    ListElement { name: "板 厚";     len:45  ;test:"5"}
-                    ListElement { name: "上死点";   len:45  ;test:"100"}
-                    ListElement { name: "材 料";     len:45  ;test:"铝合金"}
-                    ListElement { name: "转速点";   len:45  ;test:"200"}
-                    //ListElement { name: "";         len:45  }
-                    ListElement { name: "夹紧点";    len:45  ;test:"300"}
+            Repeater {
+                id:lrepeater
+                model:ListModel{
+                    id:lrepeatermodel
+                                    ListElement { name: "名 称";     len:70  ;test:"feffef"}
+                                    ListElement { name: "上 模";     len:200 ;test:"bn-5"}
+                                    ListElement { name: "板 宽";     len:45  ;test:"300"}
+                                    ListElement { name: "下 模";     len:45  ;test:"xn-7"}
+                                    ListElement { name: "板 厚";     len:45  ;test:"5"}
+                                    ListElement { name: "上死点";   len:45  ;test:"100"}
+                                    ListElement { name: "材 料";     len:45  ;test:"铝合金"}
+                                    ListElement { name: "转速点";   len:45  ;test:"200"}
+                                    ListElement { name: "夹紧点";    len:45  ;test:"300"}
+                                }
+                Rectangle{
+                    width:300
+                    height:30
+                    color:mpane.color
+                    Label {
+                        id:firstname
+                        width: 65
+                        y:5
+                        //wrapMode: Label.Wrap
+                        //horizontalAlignment: Qt.AlignHCenter
+                        text: name
+                        font.pixelSize: 18
+                        //font.bold: true
                     }
-                    Rectangle{
-                        width:300
-                        height:30
-                        color:mpane.color
-                            Label {
-                                id:firstname
-                                width: 65
-                                y:5
-                                //wrapMode: Label.Wrap
-                                //horizontalAlignment: Qt.AlignHCenter
-                                text: name
-                                font.pixelSize: 18
-                                //font.bold: true
-                            }
-                            TextField {
-                                id:textname
-                                width: 100
-                                height: 35
-                                placeholderText: "TextField"
-                                //anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.left: firstname.right
-                            }
-                            Label{
-                                width:100
-                                height:35
-                                text:"   = "+test
-                                font.pixelSize: 18
-                                anchors.left: textname.right
-                            }
-
-
+                    TextField {
+                        id:textname
+                        width: 100
+                        height: 35
+                        placeholderText: "TextField"
+                        //anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.left: firstname.right
                     }
-
+                    Label{
+                        id:originvalue
+                        width:100
+                        height:35
+                        text:"   = "+test+index
+                        font.pixelSize: 18
+                        anchors.left: textname.right
+                    }
                 }
-
-
-
             }
-
-
-
+        }
     }
 }
+

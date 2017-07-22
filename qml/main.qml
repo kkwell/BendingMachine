@@ -21,7 +21,7 @@ ApplicationWindow {
     property int mtheme:Material.Light
     property int maccent:Material.LightBlue//Material.Grey//Material.Cyan
     property int mprimary:Material.Grey//Material.Cyan
-    //property int ourIndex:0
+    property string xxx
 
     Material.theme: mtheme
     Material.accent: maccent//Material.Cyan
@@ -35,12 +35,14 @@ ApplicationWindow {
         y:7
         z:1
     }
+
     function log(message) {
         console.log(message);
     }
 
     Component.onCompleted:{
         //animationForOpacity.start();
+
     }
 
     StackView {
@@ -49,7 +51,9 @@ ApplicationWindow {
         height:parent.height-toolbar.height
         initialItem: data_page//data_page//"qrc:/menulist.qml"
     }
-
+//    Data {
+//        id: data
+//    }
     Component{
         id:data_page
         Datasql {
@@ -57,10 +61,12 @@ ApplicationWindow {
             p_width:stackView.width
             p_height:stackView.height
             //ggp:data.idData
-            Data {
-                id: data
-            }
-            ggp:data.idData
+//            Data {
+//                id: data
+//            }
+            //xdf.text: data.idData
+            //ggp:data.idData
+
         }
     }
     Component{

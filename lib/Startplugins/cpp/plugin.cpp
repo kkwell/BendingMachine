@@ -39,7 +39,55 @@
 ****************************************************************************/
 
 #include "plugin.h"
+#include <QJsonObject>
+#include <QtDebug>
 
+CppListModel::CppListModel(QObject *parent):
+    QAbstractListModel(parent)
+{  }
+
+QHash<int, QByteArray> CppListModel::roleNames() const
+{
+    QHash<int, QByteArray> roleNames;
+    roleNames.insert(NameRole, "name");
+    roleNames.insert(AgeRole, "age");
+    roleNames.insert(ModelDataRole, "modelData");
+    return roleNames;
+}
+
+int CppListModel::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    // 返回固定
+    return 5;
+}
+
+QVariant CppListModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid() || index.row() < 0)
+        return QVariant();
+
+    if (index.row() >= 5) {
+        qWarning() << "SatelliteModel: Index out of bound";
+        return QVariant();
+    }
+
+    switch (role)
+    {
+    case NameRole:
+        return QString("this name from cpp");
+    case AgeRole:
+        return 551;
+    case ModelDataRole:
+        return QJsonObject {
+            { "name", "this name from cpp"},
+            { "age", 551 }
+        };
+    default:
+        break;
+    }
+    return QVariant();
+}
 //![plugin]
 class QExampleQmlPlugin : public QQmlExtensionPlugin
 {
@@ -50,7 +98,8 @@ public:
     void registerTypes(const char *uri)
     {
         Q_ASSERT(uri == QLatin1String("Startplugins"));
-        qmlRegisterType<StartBending>(uri, 1, 0, "Start");
+        qmlRegisterType<CppListModel>(uri, 1, 0, "Start");
+        //qmlRegisterType<StartBending>("Mstartplugins", 1, 0, "xxy");
     }
 };
 //![plugin]

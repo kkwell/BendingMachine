@@ -32,8 +32,5 @@ INSTALLS += target qml pluginfiles
 
 CONFIG += install_ok  # Do not cargo-cult this!
 
-DISTFILES += \
-    imports/Dataplugins/Mqsql.qml
-
 RESOURCES += \
     imports/Dataplugins/png.qrc

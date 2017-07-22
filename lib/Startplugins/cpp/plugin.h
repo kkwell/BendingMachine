@@ -8,6 +8,26 @@
 #include <qbasictimer.h>
 #include <qcoreapplication.h>
 
+#include <QAbstractListModel>
+
+
+
+class CppListModel : public QAbstractListModel
+{
+    Q_OBJECT
+public:
+    explicit CppListModel(QObject *parent = 0);
+
+    enum Roles{
+        NameRole = Qt::UserRole + 1,            // name
+        AgeRole,                                // age
+        ModelDataRole,                          // modelData
+    };
+
+    QHash<int, QByteArray> roleNames() const;
+    int rowCount(const QModelIndex &parent) const;
+    QVariant data(const QModelIndex &index, int role) const;
+};
 
 class StartBending : public QObject
 {

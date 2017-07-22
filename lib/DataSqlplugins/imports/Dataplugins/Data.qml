@@ -7,7 +7,7 @@ import "qrc:/MaterialUI/"
 import "qrc:/MaterialUI/Interface/"
 import QtQuick.Controls.Material 2.0
 import Qt.labs.settings 1.0
-//import Dataplugins 1.0
+import Dataplugins 1.0
 Rectangle {
     id: root
     width: p_width; height: p_height;
@@ -15,7 +15,9 @@ Rectangle {
     property variant p_height
     property string ggp:"fef"
     //signal
-
+//Data{
+//    id:data
+//}
     signal returnClicked(variant type);
 
     //function
