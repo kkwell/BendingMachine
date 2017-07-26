@@ -43,11 +43,15 @@
 BendingProgram::BendingProgram(QObject *parent):
     QAbstractListModel(parent)
 {
-    //opensql();
+    databasename = "BendingDataBase.db";
+    databasepagename = "BendingData";
+    databasenum = -1;
+    pagedatanum = 8;
+    //opensql(databasename);
     //createsql();
     //deletesql();
     //insertsql();
-    selectsql();
+//    selectsql();
 }
 
 QHash<int, QByteArray> BendingProgram::roleNames() const
@@ -83,6 +87,27 @@ QHash<int, QByteArray> BendingProgram::roleNames() const
 
     //}
     return roleNames;
+}
+
+Qt::ItemFlags  BendingProgram::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return Qt::ItemIsEnabled;
+
+    return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+}
+
+bool BendingProgram::setData(const QModelIndex &index,const QVariant &value, int role)
+{
+    if (index.isValid()) {
+        JsonData[1].remove("id");
+        //JsonData[1].insert("id",55);
+        JsonData[index.row()].insert("name","what's that");
+        qDebug()<<JsonData[0];
+        emit  dataChanged(index, index);
+        return true;
+    }
+    return false;
 }
 
 int BendingProgram::rowCount(const QModelIndex &parent) const
@@ -122,12 +147,12 @@ int BendingProgram::rowCount(const QModelIndex &parent) const
 //    }
 
     //qDebug()<<"opensql faile";
-    return 8;
+    return 6;
 }
 
 QVariant BendingProgram::data(const QModelIndex &index, int role) const
 {
-    Q_UNUSED(role);
+    //Q_UNUSED(role);
     if (!index.isValid() || index.row() < 0)
         return QVariant();
 
@@ -135,7 +160,8 @@ QVariant BendingProgram::data(const QModelIndex &index, int role) const
         qWarning() << "SatelliteModel: Index out of bound";
         return QVariant();
     }
-    //qDebug()<<index.row();
+
+    qDebug()<<index.row()<<"-"<<index<<"-"<<role<<"-"<<index.column();
     //index.row()
 //        switch (index.row())
 //        {
@@ -152,7 +178,7 @@ QVariant BendingProgram::data(const QModelIndex &index, int role) const
         //return QVariant();
 }
 
-bool BendingProgram::opensql()
+bool BendingProgram::opensql(QString &str)
 {
     //database = QSqlDatabase::addDatabase("QSQLITE");
     if(QSqlDatabase::contains("qt_sql_default_connection"))
@@ -160,7 +186,7 @@ bool BendingProgram::opensql()
     else
         database = QSqlDatabase::addDatabase("QSQLITE");
 
-    database.setDatabaseName("BendingDataBase.db");
+    database.setDatabaseName(str);
     if(database.open())
     {
         qDebug()<<"Database Opened";
@@ -280,14 +306,14 @@ bool BendingProgram::createsql()
         }
     }
 }
-bool BendingProgram::insertsql()
+void BendingProgram::minsert(int index)
 {
     QString insert_sql = "insert into BendingData values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    if(opensql())
+    if(opensql(databasename))
     {
         QSqlQuery *sql_query = new QSqlQuery;
         sql_query->prepare(insert_sql);
-        sql_query->addBindValue(5);
+        sql_query->addBindValue(index);
         sql_query->addBindValue(0);
         sql_query->addBindValue("BendingProgram");
         sql_query->addBindValue(3);
@@ -305,41 +331,29 @@ bool BendingProgram::insertsql()
         if(!sql_query->exec())
         {
             qDebug()<<sql_query->lastError();
-            //closesql();
-            return false;
+            //return false;
         }
         else
         {
             qDebug()<<"insertsql success";
-            //closesql();
-            return true;
+            //return true;
         }
     }
     else
     {
         qDebug() << "Error: Failed to connect database." << database.lastError();
-        return false;
+        //return false;
     }
-
-    //    if(R_num>0)
-    //    {
-    //        qDebug()<<"insertsql faile";
-    //        if(R_num==1)
-    //            closesql();
-    //        return false;
-    //    }
-    //    else
-    //    {
-
-    //        qDebug()<<"insertsql success";
-    //        closesql();
-    //        return true;
-    //    }
+//    deletesql();
+//    selectsql();
+//    dataChanged(createIndex(0, 0), createIndex(7, 0), QVector<int>() << 3);
 }
 
-bool BendingProgram::selectsql()
+bool BendingProgram::selectsql(int &seeknum,QString &pagename,int &maxnum)
 {
-    QString select_all_sql = "select * from BendingData order by id";
+    QString select_all_sql = "select * from "+pagename;// order by id";//"select *from BendingData%1 where data between '%2' and '%4'";
+    QString time = QDate::currentDate().toString("yyyy-MM-dd HH:mm:ss");
+    qDebug()<<time;
     const char* COLUMN_NAMES[] = {
         "id",
         "draw",
@@ -358,7 +372,7 @@ bool BendingProgram::selectsql()
         "enable",
         NULL
     };
-    if(opensql())
+    if(opensql(databasename))
     {
         QSqlQuery sql_query;
         sql_query.prepare(select_all_sql);
@@ -366,13 +380,27 @@ bool BendingProgram::selectsql()
         if(!sql_query.exec())
         {
             qDebug()<<sql_query.lastError();
-            //closesql();
             return false;
         }
         else
         {
+            if(databasenum<0)
+            {
+                sql_query.last();
+                databasenum = sql_query.at()+1;
+                qDebug()<<"databasenum:"<<databasenum;
+            }
+
+            sql_query.seek(seeknum);
             int i=0,n=0;
-            while(sql_query.next())
+            while(COLUMN_NAMES[n])
+            {
+                JsonData[0].insert(COLUMN_NAMES[n],sql_query.value(n).toString());
+                n++;
+            }
+            n=0;
+            i++;
+            while(sql_query.next()&&i<maxnum)
             {
                 while(COLUMN_NAMES[n])
                 {
@@ -380,10 +408,9 @@ bool BendingProgram::selectsql()
                     n++;
                 }
                 n=0;
-                //qDebug()<<QString("ID:%1").arg(id);
                 i++;
             }
-            while(i<8)
+            while(i<maxnum)
             {
                 while(COLUMN_NAMES[n])
                 {
@@ -422,10 +449,35 @@ void BendingProgram::closesql()
     qDebug()<<"stopclose";
 }
 
+//int BendingProgram::type()
+//{
+//    qDebug()<<xnum;
+//    selectsql();
+//    return xnum;
+//}
+
+void BendingProgram::type(int n)
+{
+    switch(n)
+    {
+    case 0:
+        selectsql(n,databasepagename,pagedatanum);//从首页开始
+        break;
+    case 1:
+        break;
+    default:break;
+
+    }
+}
+void BendingProgram::test()
+{
+    qDebug()<<xnum;
+}
 QString BendingProgram::getidData()
 {
     return m_idData;
 }
+
 void BendingProgram::setidData(QString str)
 {
     m_idData = str;

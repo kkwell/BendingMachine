@@ -60,6 +60,7 @@ ApplicationWindow {
             id:data_page_sql
             p_width:stackView.width
             p_height:stackView.height
+            typenum:1
             //ggp:data.idData
 //            Data {
 //                id: data

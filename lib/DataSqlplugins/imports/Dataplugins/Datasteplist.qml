@@ -16,8 +16,8 @@ Rectangle{
         ListElement { name: "X";        len:100;  b_id:"header5"  }
         ListElement { name: "R";        len:100;  b_id:"header6"  }
         ListElement { name: "退让距离";   len:100;  b_id:"header7"  }
-        ListElement { name: "Y1";   len:100;  b_id:"header8"  }
-        ListElement { name: "Y2";   len:100;  b_id:"header9"  }
+        ListElement { name: "压力";   len:100;  b_id:"header8"  }
+        ListElement { name: "补偿";   len:100;  b_id:"header9"  }
     }
     Component {
         id: swipeDelegateComponent

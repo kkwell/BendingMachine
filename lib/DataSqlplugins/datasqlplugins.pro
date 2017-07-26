@@ -16,7 +16,8 @@ pluginfiles.files += \
     imports/Dataplugins/Data.qml \
     imports/Dataplugins/Datalist.qml \
     imports/Dataplugins/Datastep.qml \
-    imports/Dataplugins/Datasteplist.qml
+    imports/Dataplugins/Datasteplist.qml \
+    imports/Dataplugins/ListViewLoader.qml
 
 qml.files = plugins.qml
 qml.path += $$PWD/

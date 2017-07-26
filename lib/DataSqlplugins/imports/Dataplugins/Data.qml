@@ -13,18 +13,24 @@ Rectangle {
     width: p_width; height: p_height;
     property variant p_width
     property variant p_height
-    property string ggp:"fef"
+    property variant typenum
     //signal
 //Data{
 //    id:data
 //}
+    function log(message) {
+        console.log(message);
+    }
+    function myQmlFunction(msg)
+    {
+        log("Got message:",msg)
+        return "some return value"
+    }
     signal returnClicked(variant type);
 
     //function
 
-    function log(message) {
-        console.log(message);
-    }
+
 
     ListModel {
         id: sourceModel
@@ -96,6 +102,7 @@ Rectangle {
                 height: parent.height
                 //color:"black"//"#f2f1f0"
                 Datalist{
+                    id:topleftRec
                     //visible: p_page===0?true:false
 
                 }
@@ -166,6 +173,7 @@ Rectangle {
                                 color: 'black'
                             }
                             onClicked:{
+
 
                             }
                             style: ButtonStyle{
