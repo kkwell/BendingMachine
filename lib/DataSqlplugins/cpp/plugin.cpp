@@ -45,13 +45,12 @@ BendingProgram::BendingProgram(QObject *parent):
 {
     databasename = "BendingDataBase.db";
     databasepagename = "BendingData";
-    databasenum = -1;
-    pagedatanum = 8;
-    //opensql(databasename);
-    //createsql();
-    //deletesql();
-    //insertsql();
-//    selectsql();
+    m_pagenum = 1;
+    m_databasenum = -1;
+    pagedatanum = 0;
+    listviewpagenum = 8;
+    m_selectIndex = 0;
+    m_type = 0;
 }
 
 QHash<int, QByteArray> BendingProgram::roleNames() const
@@ -99,10 +98,13 @@ Qt::ItemFlags  BendingProgram::flags(const QModelIndex &index) const
 
 bool BendingProgram::setData(const QModelIndex &index,const QVariant &value, int role)
 {
+    Q_UNUSED(value)
+    Q_UNUSED(role)
     if (index.isValid()) {
         JsonData[1].remove("id");
         //JsonData[1].insert("id",55);
         JsonData[index.row()].insert("name","what's that");
+
         qDebug()<<JsonData[0];
         emit  dataChanged(index, index);
         return true;
@@ -147,21 +149,20 @@ int BendingProgram::rowCount(const QModelIndex &parent) const
 //    }
 
     //qDebug()<<"opensql faile";
-    return 6;
+    return pagedatanum;
 }
 
 QVariant BendingProgram::data(const QModelIndex &index, int role) const
 {
-    //Q_UNUSED(role);
+    Q_UNUSED(role);
     if (!index.isValid() || index.row() < 0)
         return QVariant();
 
-    if (index.row() >= 8) {
+    if (index.row() >= pagedatanum) {
         qWarning() << "SatelliteModel: Index out of bound";
         return QVariant();
     }
 
-    qDebug()<<index.row()<<"-"<<index<<"-"<<role<<"-"<<index.column();
     //index.row()
 //        switch (index.row())
 //        {
@@ -230,7 +231,7 @@ int BendingProgram::mathod_sql(QString str)
 
 bool BendingProgram::createsql()
 {
-    QString create_sql = "create table IF NOT EXISTS BendingData (id integer primary key autoincrement,\
+    QString create_sql = "create table IF NOT EXISTS BendingData (id integer,\
             draw integer,\
             name varchar(30),\
             stepnum integer,\
@@ -276,7 +277,7 @@ bool BendingProgram::createsql()
         qDebug()<< "Table Created" ;
 
         sql_query.prepare(insert_sql);
-        sql_query.addBindValue(1);
+        sql_query.addBindValue(0);
         sql_query.addBindValue(1);
         sql_query.addBindValue("BendingProgram");
         sql_query.addBindValue(3);
@@ -306,28 +307,161 @@ bool BendingProgram::createsql()
         }
     }
 }
-void BendingProgram::minsert(int index)
+void BendingProgram::getsqlnum()
 {
+    QString select_all_sql = "select * from "+databasepagename;
+    if(!database.isOpen())
+    {
+        opensql(databasename);
+    }
+    if(database.isOpen())
+    {
+        QSqlQuery sql_query;
+        sql_query.prepare(select_all_sql);
+
+        if(!sql_query.exec())
+        {
+            qDebug()<<sql_query.lastError();
+        }
+        else
+        {
+            sql_query.last();
+            m_databasenum = sql_query.at()+1;
+            int num = ceil(double(m_databasenum)/listviewpagenum);
+            if(m_pagenum==num)
+            {
+                pagedatanum = m_databasenum - (num-1)*listviewpagenum;
+            }
+            else if(m_pagenum<num)
+            {
+                pagedatanum = listviewpagenum;
+            }
+            else
+            {
+                qDebug()<<"m_pagenum:"<<m_pagenum<<"sum_num:"<<num;
+            }
+            setDatabasenum(m_databasenum);
+            setPagenum(m_pagenum);
+            qDebug()<<"总数:"<<m_databasenum<<"页码:"<<m_pagenum<<"当前页面数据个数:"<<pagedatanum;
+        }
+    }
+}
+void BendingProgram::id_changeup(int startId)//数据库id
+{
+//    QString updateId;// = QString("update %1 set id=id+1 where id=%2").arg(databasepagename).arg(startId);
+//    if(database.isOpen())
+//    {
+//        int index = m_databasenum-1;
+//        QSqlQuery *sql_query = new QSqlQuery;
+//        while(index>startId)
+//        {
+//            updateId = QString("update %1 set id=id+1 where id=%2").arg(databasepagename).arg(index);
+//            sql_query->prepare(updateId);
+//            if(!sql_query->exec())
+//            {
+//                qDebug()<<sql_query->lastError();
+//                break;
+//                //return false;
+//            }
+//            else
+//            {
+//                qDebug()<<"id_changeup success";
+//            }
+//            index--;
+//        }
+//    }
+//    else
+//    {
+//        qDebug() << "Error: Failed to connect database." << database.lastError();
+//        //return false;
+//    }
+    QString updateId = QString("update %1 set id=id+1 where id>%2").arg(databasepagename).arg(startId);
+    if(database.isOpen())
+    {
+        QSqlQuery *sql_query = new QSqlQuery;
+
+        sql_query->prepare(updateId);
+        if(!sql_query->exec())
+        {
+            qDebug()<<sql_query->lastError();
+            //return false;
+        }
+        else
+        {
+            qDebug()<<"id_changeup success";
+        }
+
+    }
+    else
+    {
+        qDebug() << "Error: Failed to connect database." << database.lastError();
+        //return false;
+    }
+}
+void BendingProgram::id_changedown(int startId)//数据库id
+{
+    QString updateId = QString("update %1 set id=id-1 where id>%2").arg(databasepagename).arg(startId);
+    if(database.isOpen())
+    {
+        QSqlQuery *sql_query = new QSqlQuery;
+
+        sql_query->prepare(updateId);
+        if(!sql_query->exec())
+        {
+            qDebug()<<sql_query->lastError();
+            //return false;
+        }
+        else
+        {
+            qDebug()<<"id_changedown success";
+        }
+
+    }
+    else
+    {
+        qDebug() << "Error: Failed to connect database." << database.lastError();
+        //return false;
+    }
+}
+void BendingProgram::minsert(int index)//数据库id
+{
+    if(index<0)
+        return;
     QString insert_sql = "insert into BendingData values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    if(opensql(databasename))
+    const char* COLUMN_NAMES[] = {
+        //"id",
+        "draw",
+        "name",
+        "stepnum",
+        "widthness",
+        "thickness",
+        "material",
+        "topmould",
+        "bottommould",
+        "workednum",
+        "edittime",
+        "shangsidian",
+        "zhuansudian",
+        "jiajindian",
+        "enable",
+        NULL
+    };
+    id_changeup(index);
+    if(database.isOpen())
     {
         QSqlQuery *sql_query = new QSqlQuery;
         sql_query->prepare(insert_sql);
-        sql_query->addBindValue(index);
-        sql_query->addBindValue(0);
-        sql_query->addBindValue("BendingProgram");
-        sql_query->addBindValue(3);
-        sql_query->addBindValue(3.14);
-        sql_query->addBindValue(5.6577);
-        sql_query->addBindValue("铝制");
-        sql_query->addBindValue("bv-Top");
-        sql_query->addBindValue("xx-Bottom");
-        sql_query->addBindValue(50);
-        sql_query->addBindValue("2017-7-18 10:00");
-        sql_query->addBindValue(100);
-        sql_query->addBindValue(200);
-        sql_query->addBindValue(300);
-        sql_query->addBindValue(1);
+
+        sql_query->addBindValue(index+1);
+
+        int n=0;
+        //QString name;
+        while(COLUMN_NAMES[n])
+        {
+            sql_query->addBindValue(JsonData[index-(m_pagenum-1)*listviewpagenum].take(COLUMN_NAMES[n]));
+            //JsonData[0].insert(COLUMN_NAMES[n],sql_query.value(n).toString());
+            n++;
+        }
         if(!sql_query->exec())
         {
             qDebug()<<sql_query->lastError();
@@ -336,7 +470,7 @@ void BendingProgram::minsert(int index)
         else
         {
             qDebug()<<"insertsql success";
-            //return true;
+            settype(0);
         }
     }
     else
@@ -344,16 +478,22 @@ void BendingProgram::minsert(int index)
         qDebug() << "Error: Failed to connect database." << database.lastError();
         //return false;
     }
-//    deletesql();
-//    selectsql();
-//    dataChanged(createIndex(0, 0), createIndex(7, 0), QVector<int>() << 3);
+//    beginResetModel();
+//    for(int i=0;i<8;i++){
+//    JsonData[i].insert("name","what's that");
+//    }
+    //endInsertRows();
+//beginResetModel();
+//selectsql(0,databasepagename,);
+//endResetModel();
 }
 
 bool BendingProgram::selectsql(int &seeknum,QString &pagename,int &maxnum)
 {
-    QString select_all_sql = "select * from "+pagename;// order by id";//"select *from BendingData%1 where data between '%2' and '%4'";
-    QString time = QDate::currentDate().toString("yyyy-MM-dd HH:mm:ss");
-    qDebug()<<time;
+    QString select_all_sql = QString("select * from %1 order by id").arg(pagename);
+    // order by id";//"select *from BendingData%1 where data between '%2' and '%4'";
+    //QString time = QDate::currentDate().toString("yyyy-MM-dd HH:mm:ss");
+    //qDebug()<<time;
     const char* COLUMN_NAMES[] = {
         "id",
         "draw",
@@ -372,8 +512,13 @@ bool BendingProgram::selectsql(int &seeknum,QString &pagename,int &maxnum)
         "enable",
         NULL
     };
-    if(opensql(databasename))
+    if(!database.isOpen())
     {
+        opensql(databasename);
+    }
+    if(database.isOpen())
+    {
+
         QSqlQuery sql_query;
         sql_query.prepare(select_all_sql);
 
@@ -384,15 +529,16 @@ bool BendingProgram::selectsql(int &seeknum,QString &pagename,int &maxnum)
         }
         else
         {
-            if(databasenum<0)
+            if(m_databasenum<0)
             {
                 sql_query.last();
-                databasenum = sql_query.at()+1;
-                qDebug()<<"databasenum:"<<databasenum;
+                m_databasenum = sql_query.at()+1;
+                qDebug()<<"databasenum:"<<m_databasenum;
             }
 
             sql_query.seek(seeknum);
             int i=0,n=0;
+            beginResetModel();
             while(COLUMN_NAMES[n])
             {
                 JsonData[0].insert(COLUMN_NAMES[n],sql_query.value(n).toString());
@@ -420,26 +566,39 @@ bool BendingProgram::selectsql(int &seeknum,QString &pagename,int &maxnum)
                 n=0;
                 i++;
             }
-
+            endResetModel();
             return true;
         }
     }
     return false;
 }
-bool BendingProgram::deletesql()
+void BendingProgram::deletesql(int index)//id号
 {
-    QString delete_sql = "delete from BendingData where id=2";
-    int R_num = mathod_sql(delete_sql);
-    if(R_num>0)
+    if(index<0)
+        return;
+    QString delete_sql = QString("delete from BendingData where id=%1").arg(index);
+
+    if(database.isOpen())
     {
-        qDebug()<<"BendingData delete failed";
-        return false;
+        QSqlQuery *sql_query = new QSqlQuery;
+        sql_query->prepare(delete_sql);
+
+        if(!sql_query->exec())
+        {
+            qDebug()<<sql_query->lastError();
+            //return false;
+        }
+        else
+        {
+            qDebug()<<"deletesql success";
+            id_changedown(index);
+            settype(0);
+        }
     }
     else
     {
-        qDebug()<<"BendingData delete success";
-        //closesql();
-        return true;
+        qDebug() << "Error: Failed to connect database." << database.lastError();
+        //return false;
     }
 }
 
@@ -449,29 +608,93 @@ void BendingProgram::closesql()
     qDebug()<<"stopclose";
 }
 
-//int BendingProgram::type()
-//{
-//    qDebug()<<xnum;
-//    selectsql();
-//    return xnum;
-//}
-
-void BendingProgram::type(int n)
+void BendingProgram::settype(int n)//数据库界面初始化
 {
+    m_type = n;
+    int num;
     switch(n)
     {
     case 0:
-        selectsql(n,databasepagename,pagedatanum);//从首页开始
+        //createsql();
+        getsqlnum();
+        num = (m_pagenum-1)*listviewpagenum;
+        selectsql(num,databasepagename,pagedatanum);//从首页开始
         break;
     case 1:
         break;
     default:break;
 
     }
+    emit typeChanged();
 }
+int BendingProgram::type()
+{
+    return m_type;
+}
+
 void BendingProgram::test()
 {
-    qDebug()<<xnum;
+    //beginResetModel();
+    setselectIndex(0);
+    //endResetModel();
+//    beginResetModel();
+//    JsonData[0].insert("name","yes 1");
+//    JsonData[1].insert("name","yes 2");
+//    JsonData[2].insert("name","yes 3");
+//    JsonData[3].insert("name","yes 4");
+//    JsonData[4].insert("name","yes 5");
+//    JsonData[5].insert("name","yes 6");
+//    endResetModel();
+    //beginRemoveRows/endRemoveRows
+    //beginInsertRows/endInsertRows
+}
+void BendingProgram::pagedown()
+{
+    int num = ceil(double(m_databasenum)/listviewpagenum);
+    if(m_pagenum<num)
+    {
+        m_pagenum++;
+        if(m_pagenum==num)
+        {
+            pagedatanum = m_databasenum - (num-1)*listviewpagenum;
+        }
+        else if(m_pagenum<num)
+        {
+            pagedatanum = listviewpagenum;
+        }
+        else
+        {
+            qDebug()<<"m_pagenum:"<<m_pagenum<<"sum_num:"<<num;
+        }
+        num = (m_pagenum-1)*listviewpagenum;
+        selectsql(num,databasepagename,pagedatanum);
+        setPagenum(m_pagenum);
+
+    }
+}
+void BendingProgram::pageup()
+{
+    int num = ceil(double(m_databasenum)/listviewpagenum);
+    if(m_pagenum>1)
+    {
+        m_pagenum--;
+        if(m_pagenum==num)
+        {
+            pagedatanum = m_databasenum - (num-1)*listviewpagenum;
+        }
+        else if(m_pagenum<num)
+        {
+            pagedatanum = listviewpagenum;
+        }
+        else
+        {
+            qDebug()<<"m_pagenum:"<<m_pagenum<<"sum_num:"<<num;
+        }
+        num = (m_pagenum-1)*listviewpagenum;
+        selectsql(num,databasepagename,pagedatanum);
+        setPagenum(m_pagenum);
+        setselectIndex(0);
+    }
 }
 QString BendingProgram::getidData()
 {
@@ -482,6 +705,33 @@ void BendingProgram::setidData(QString str)
 {
     m_idData = str;
     emit idDataChanged();
+}
+int BendingProgram::databasenum()
+{
+    return m_databasenum;
+}
+void BendingProgram::setDatabasenum(int n)
+{
+    m_databasenum = n;
+    emit databasenumChanged();
+}
+int BendingProgram::pagenum()
+{
+    return m_pagenum;
+}
+void BendingProgram::setPagenum(int n)
+{
+    m_pagenum = n;
+    emit pagenumChanged();
+}
+int BendingProgram::selectindex()
+{
+    return m_selectIndex;
+}
+void BendingProgram::setselectIndex(int n)
+{
+    m_selectIndex = n;
+    emit selectIndexChanged();
 }
 
 //signals:

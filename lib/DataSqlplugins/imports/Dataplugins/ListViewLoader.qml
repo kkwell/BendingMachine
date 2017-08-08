@@ -5,7 +5,19 @@ import QtQuick.Controls 2.0
 Rectangle{
     width: 920
     height: parent.height
-    //anchors.top: topRow.bottom
+
+    function setlrepeatermodel(jsonData,ourIndex){
+        lrepeatermodel.setProperty(0, "test", jsonData.name)
+        lrepeatermodel.setProperty(1, "test", jsonData.topmould)
+        lrepeatermodel.setProperty(2, "test", jsonData.widthness)
+        lrepeatermodel.setProperty(3, "test", jsonData.bottommould)
+        lrepeatermodel.setProperty(4, "test", jsonData.thickness)
+        lrepeatermodel.setProperty(5, "test", jsonData.shangsidian)
+        lrepeatermodel.setProperty(6, "test", jsonData.material)
+        lrepeatermodel.setProperty(7, "test", jsonData.zhuansudian)
+        lrepeatermodel.setProperty(8, "test", jsonData.jiajindian)
+    }
+
     Column {
         width: 920
         height: parent.height
@@ -15,13 +27,16 @@ Rectangle{
             width:parent.width
             height:240
             color:"white"
+
             ListView {
                 id: listView
                 width: parent.width
                 height: 240
                 clip: true
                 model: mDatajson
-                currentIndex:0
+                currentIndex:selectx
+                focus:true
+                //highlightRangeMode:ListView.StrictlyEnforceRange
                 delegate: Loader {
                     id: delegateLoader
                     width: listView.width
@@ -30,6 +45,7 @@ Rectangle{
                     property ListView view: listView
                     property int ourIndex: index
                     property var jsonData: json
+                    property int selectIndex: selectx
 
                     // Can't find a way to do this in the SwipeDelegate component itself,
                     // so do it here instead.
@@ -52,17 +68,32 @@ Rectangle{
                         }
                     }
                 }
+                //onCurrentIndexChanged: console.log("ssx",currentIndex)
             }
         }
-        Text {
-            width:100
+        Row{
+            width:parent.width
             height: 70
-            text:"参   数"
-            font.pixelSize: 23
-            verticalAlignment: Text.AlignVCenter
+            spacing:690
+            Text {
+                width:100
+                height:parent.height
+                text:"参   数"
+                font.pixelSize: 23
+                verticalAlignment: Text.AlignVCenter
+            }
+            Text{
+                width:100
+                height:parent.height-30
+                text:"页:"+mDatajson.pagenum+"/"+Math.ceil(mDatajson.databasenum/8)+"    总数:"+mDatajson.databasenum
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.pixelSize: 17
+            }
+
         }
         Grid {
-            x:150
+            x:110
             y:30
             width: parent.width
             height: parent.height-listView.height-30
@@ -75,15 +106,15 @@ Rectangle{
                 id:lrepeater
                 model:ListModel{
                     id:lrepeatermodel
-                    ListElement { name: "名 称";     len:70  ;test:"";unit:""}
-                    ListElement { name: "上 模";     len:200 ;test:"";unit:""}
-                    ListElement { name: "板 宽";     len:45  ;test:"" ;unit:" mm"}
-                    ListElement { name: "下 模";     len:45  ;test:"";unit:""}
-                    ListElement { name: "板 厚";     len:45  ;test:"";unit:" mm"}
-                    ListElement { name: "上死点";    len:45  ;test:"";unit:" mm"}
-                    ListElement { name: "材 料";     len:45  ;test:"";unit:""}
-                    ListElement { name: "转速点";    len:45  ;test:"";unit:" mm"}
-                    ListElement { name: "夹紧点";    len:45  ;test:"";unit:" mm"}
+                    ListElement { name: "名 称";     tip:"TextField"  ;test:"";unit:""}
+                    ListElement { name: "上 模";     tip:"TextField" ;test:"";unit:""}
+                    ListElement { name: "板 宽";     tip:"00.00"  ;test:"" ;unit:" mm"}
+                    ListElement { name: "下 模";     tip:"TextField"  ;test:"";unit:""}
+                    ListElement { name: "板 厚";     tip:"00.00"  ;test:"";unit:" mm"}
+                    ListElement { name: "上死点";    tip:"00.00"  ;test:"";unit:" mm"}
+                    ListElement { name: "材 料";     tip:"TextField"  ;test:"";unit:""}
+                    ListElement { name: "转速点";    tip:"00.00"  ;test:"";unit:" mm"}
+                    ListElement { name: "夹紧点";    tip:"00.00"  ;test:"";unit:" mm"}
                 }
 
                 Rectangle{
@@ -95,22 +126,24 @@ Rectangle{
                         id:firstname
                         width: 65
                         y:5
-                        //text: jsonData.name
+                        text: name
                         font.pixelSize: 18
-                        //font.bold: true
                     }
                     TextField {
                         id:textname
                         width: 100
-                        height: 35
-                        placeholderText: "TextField"
+                        height: 40
+                        placeholderText: tip
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
                         anchors.left: firstname.right
+                        font.pixelSize: 20
                     }
                     Label{
                         id:originvalue
                         width:100
                         height:35
-                        text:"   = "+index
+                        text:"   = "+test
                         font.pixelSize: 18
                         anchors.left: textname.right
                     }
@@ -144,7 +177,7 @@ Rectangle{
                 Text{
                     width:60
                     height: parent.height
-                    text:jsonData.id//"1"
+                    text:(mDatajson.pagenum-1)*8+ourIndex+1//jsonData.id
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pixelSize: 16
@@ -229,23 +262,22 @@ Rectangle{
                 id:mClickedArea
                 anchors.fill: parent
                 onClicked:{
-                    listView.currentIndex = ourIndex;
-                    console.log(ourIndex);
-                    //setlrepeatermodel(jsonData)
+                    selectx = ourIndex;
+                    setlrepeatermodel(jsonData,ourIndex);
                     //                listView.remove.objectName("id");
-                    //                mDatajson.minsert(7);//mDatajson
-                    //listView.update();
-//                    for(var n;n<8;++n)
-//                    {
-                    mDatajson.setData(mDatajson.index(ourIndex,0),"fe",0)
-//                    }
+                    //                mDatajson.minsert(2);//mDatajson
+
+                    //mDatajson.setData(mDatajson.index(ourIndex,0),"fe",0)
                 }
             }
-            //}
-            //onClicked: if (swipe.complete) view.model.remove(ourIndex)
+            Component.onCompleted:{
+                if(listView.currentIndex == ourIndex){
+                    setlrepeatermodel(jsonData,ourIndex);
+                }
+            }
+
             Component {
                 id: removeComponent
-
                 Rectangle {
                     color: SwipeDelegate.pressed ? "#333" : "#444"
                     width: parent.width
@@ -261,6 +293,7 @@ Rectangle{
                 }
             }
         }
+
 
     }
 

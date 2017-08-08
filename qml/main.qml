@@ -27,7 +27,7 @@ ApplicationWindow {
     Material.accent: maccent//Material.Cyan
     Material.primary:mprimary//Material.Cyan
     Image {
-        id: xx
+        id: mylogo
         source: "logo.png"
         width:313
         height:50
@@ -42,7 +42,7 @@ ApplicationWindow {
 
     Component.onCompleted:{
         //animationForOpacity.start();
-
+        //stackView.push(data_page)
     }
 
     StackView {
@@ -50,24 +50,20 @@ ApplicationWindow {
         width:parent.width
         height:parent.height-toolbar.height
         initialItem: data_page//data_page//"qrc:/menulist.qml"
+
     }
-//    Data {
-//        id: data
-//    }
     Component{
         id:data_page
         Datasql {
             id:data_page_sql
             p_width:stackView.width
             p_height:stackView.height
-            typenum:1
             //ggp:data.idData
 //            Data {
 //                id: data
 //            }
             //xdf.text: data.idData
             //ggp:data.idData
-
         }
     }
     Component{
@@ -80,6 +76,14 @@ ApplicationWindow {
 //            }
         }
     }
+    Component{
+        id:mould_page
+        Mouldsql{
+            p_width:stackView.width
+            p_height:stackView.height
+        }
+    }
+
     Component{
         id:start_page
         StartBend { // this class is defined in QML
@@ -129,9 +133,6 @@ ApplicationWindow {
             anchors.fill: parent
             anchors.leftMargin: 13
 
-            //            ExclusiveGroup {
-            //                    id: language;
-            //                }
             Repeater {
                 id:mrep
                 model: ListModel {
@@ -146,7 +147,9 @@ ApplicationWindow {
                     ListElement { title: "权限";   source: "add_user_group.png" ;state:''}
                     ListElement { title: "帮助";   source: "P1-HELPmini.png" ;state:''}
                 }
-
+                Component.onCompleted:{
+                    mrep.itemAt(0).state='clicked'
+                }
                 Rectangle{
                     id:titleRect
                     implicitWidth: 85
@@ -195,9 +198,14 @@ ApplicationWindow {
                                     }
                                 }
                                 switch(index){
-                                case 0:return stackView.replace(data_page)
-                                case 1:return stackView.replace(datastep_page)
-                                case 2:return stackView.replace(start_page)
+                                case 0:mylogo.opacity=1
+                                    return stackView.replace(data_page)
+                                case 1:mylogo.opacity=1
+                                    return stackView.replace(datastep_page)
+                                case 2:mylogo.opacity=0
+                                    return stackView.replace(start_page)
+                                case 5:mylogo.opacity=0
+                                    return stackView.replace(mould_page)
 
                                 default:materialUI.showSnackbarMessage( "此功能暂未开放" );
                                 }

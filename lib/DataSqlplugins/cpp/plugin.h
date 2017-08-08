@@ -19,7 +19,10 @@ class BendingProgram : public QAbstractListModel
     Q_OBJECT
     //Q_PROPERTY(BendingSqlModel m_model READ getmodel WRITE setmodel NOTIFY modelChanged)
     Q_PROPERTY(QString idData READ getidData WRITE setidData NOTIFY idDataChanged)
-    Q_PROPERTY(int type WRITE type)
+    Q_PROPERTY(int databasenum READ databasenum WRITE setDatabasenum NOTIFY databasenumChanged)
+    Q_PROPERTY(int pagenum READ pagenum WRITE setPagenum NOTIFY pagenumChanged)
+    Q_PROPERTY(int selectindex READ selectindex WRITE setselectIndex NOTIFY selectIndexChanged)
+    Q_PROPERTY(int type READ type WRITE settype NOTIFY typeChanged)
 
 public:
     explicit BendingProgram(QObject *parent = 0);
@@ -31,19 +34,22 @@ public:
     Qt::ItemFlags  flags(const QModelIndex &index) const;
     bool setData(const QModelIndex &index, const QVariant &value,int role = Qt::EditRole);
 
-    //外部接口 QML调用 添加数据
-       Q_INVOKABLE void pushdata(const QString& data1, const QString& data2);
-       //外部接口 QML调用 添加数据在指定行
-       Q_INVOKABLE void  minsert(int index);
-       //外部接口 删除指定行
-       Q_INVOKABLE void  mremove(int index);
+    Q_INVOKABLE void pushdata(const QString& data1, const QString& data2);
+    Q_INVOKABLE void  minsert(int index);
+    Q_INVOKABLE void  mremove(int index);
+    Q_INVOKABLE void pagedown();
+    Q_INVOKABLE void deletesql(int index);
+    void id_changeup(int startId);
+    void id_changedown(int startId);
+    Q_INVOKABLE void pageup();
+
     enum Roles{
         JsonRole = Qt::UserRole + 1,
         NameRole,            // name
         EdittimeRole,                                // age
-        //ModelDataRole,                          // modelData
+
     };
-//int rowCount(const QModelIndex &parent = QModelIndex()) const ;
+
     QHash<int, QByteArray> roleNames() const;
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -51,39 +57,55 @@ public:
     //update company set address='',salary=20;
     //update data set id=id-1 where id>currentCount;
     //set seek
+    //insert into tablename(字段名1,...) select 字段名1... from tablename where id=...
     int mathod_sql(QString str);
-    void test();
+    Q_INVOKABLE void test();
     bool opensql(QString &str);
     void closesql();
     bool createsql();
     bool insertsql();
     bool selectsql(int &seeknum,QString &pagename,int &maxnum);
-    //void mopensql();
-    bool deletesql();
-    int xxy;
-    //int type();
-    void type(int n);
+    void getsqlnum();//获得数据库总数:m_databasenum
+
+
+
+
     QString getidData();
     void setidData(QString str);
+    int databasenum();
+    void setDatabasenum(int n);
+    int pagenum();
+    void setPagenum(int n);
+    int selectindex();
+    void setselectIndex(int n);
+
+    int type();
+    void settype(int n);
 
 signals:
     //void typeChanged();
     void idDataChanged();
-//protected:
+    void databasenumChanged();
+    void pagenumChanged();
+    void selectIndexChanged();
+    void typeChanged();
+    //protected:
 
 
 private:
     int xnum;
-    int pagedatanum;
-    int databasenum;
+    int pagedatanum;//当前页面数据个数
+    int m_pagenum;//当前页面数
+    int listviewpagenum;//listview显示数据行数
+    int m_databasenum;//数据库总数
+
+    int m_selectIndex;//当前选中行数
+    int m_type;
     QString m_idData;
     QString databasename;
     QString databasepagename;
     QSqlDatabase database;
     QSqlQuery *sql_query;
-
-    //const char* COLUMN_NAMES[];
-    //BendingSqlModel *m_model;
 };
 #endif // PLUGIN
 

@@ -24,47 +24,6 @@ Rectangle {
         console.log(message);
     }
 
-    ListModel {
-        id: sourceModel
-        ListElement {
-            num:1
-            sum: 5
-            title: "Moby-Dick"
-            time:"2017/05/06"
-            //sum: 5
-        }
-        ListElement {
-            title: "The Adventures Tom"
-            num:2
-            sum: 3
-            time:"2017/03/26"
-        }
-        ListElement {
-            title: "Cat’s Cradle"
-            num:3
-            sum: 7
-            time:"2015/08/08"
-        }
-        ListElement {
-            title: "Farenheit 451"
-            num:4
-            sum: 10
-            time:"2017/12/16"
-        }
-        ListElement {
-            title: "It"
-            num:5
-            sum: 8
-            time:"2016/03/11"
-        }
-        ListElement {
-            title: "On the Road"
-            num:6
-            sum: 9
-            time:"2015/02/06"
-        }
-    }
-
     Component.onCompleted:{
         //numColumn.setAlignment(AlignCenter)
         //log(p_page)

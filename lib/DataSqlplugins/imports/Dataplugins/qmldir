@@ -1,4 +1,5 @@
 module Dataplugins
 Datasql 1.0 Data.qml
 Datasqlstep 1.0 Datastep.qml
+Mouldsql 1.0 Mouldpage.qml
 plugin datasqlplugins

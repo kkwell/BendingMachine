@@ -5,6 +5,8 @@
         <file>png/new.png</file>
         <file>png/delete.png</file>
         <file>png/copy.png</file>
-        <file>ListViewLoader.qml</file>
+        <file>png/lbottommouldpic.png</file>
+        <file>png/ltopmouldpic.png</file>
+        <file>png/mouldpic.png</file>
     </qresource>
 </RCC>

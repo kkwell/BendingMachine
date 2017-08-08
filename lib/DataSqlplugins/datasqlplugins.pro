@@ -1,6 +1,7 @@
 TEMPLATE = lib
 CONFIG += plugin
-QT += qml \
+QT += quick quickcontrols2 \
+      qml \
       sql
 
 DESTDIR = imports/Dataplugins
@@ -17,7 +18,8 @@ pluginfiles.files += \
     imports/Dataplugins/Datalist.qml \
     imports/Dataplugins/Datastep.qml \
     imports/Dataplugins/Datasteplist.qml \
-    imports/Dataplugins/ListViewLoader.qml
+    imports/Dataplugins/ListViewLoader.qml \
+    imports/Dataplugins/Mouldpage.qml
 
 qml.files = plugins.qml
 qml.path += $$PWD/
