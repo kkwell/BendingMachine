@@ -26,7 +26,7 @@ OBJECTS_DIR = tmp
 
 INSTALLS += target qml pluginfiles
 
-CONFIG += install_ok  # Do not cargo-cult this!
+CONFIG += install_ok
 
 RESOURCES += \
     imports/Startplugins/png.qrc

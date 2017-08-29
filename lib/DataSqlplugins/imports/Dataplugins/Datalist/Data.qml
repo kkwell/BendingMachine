@@ -7,15 +7,17 @@ import "qrc:/MaterialUI/"
 import "qrc:/MaterialUI/Interface/"
 import QtQuick.Controls.Material 2.0
 import Qt.labs.settings 1.0
-import Dataplugins 1.0
-
+//import Dataplugins 1.0
 
 Rectangle {
     id: root
     width: p_width; height: p_height;
-    property variant p_width
-    property variant p_height
-    property variant typenum
+//    property variant p_width
+//    property variant p_height
+//    property variant typenum
+//    property variant mDatajson
+    //property int selectindex:0//当前选中行索引
+    color: "transparent"
     //signal
 
     function log(message) {
@@ -26,45 +28,26 @@ Rectangle {
         log("Got message:",msg)
         return "some return value"
     }
-    signal returnClicked(variant type);
 
     //function
     Column{
         anchors.fill:parent
 
-        Rectangle{
-            id:topRec
-            width: parent.width
-            height: 60
-            color:"#f2f1f0"
-            Text{
-                text:"产品库"
-                font.pixelSize: 25
-                x:20
-                y:20
-            }
-        }
-
         Row{
             width: parent.width
-            height: parent.height-topRec.height
+            height: parent.height//-topRec.height
             Rectangle{
                 width: parent.width-80
                 height: parent.height
-                //color:"black"//"#f2f1f0"
+                color:"#00000000"//"#f2f1f0"
                 Datalist{
                     id:topleftRec
-                    //visible: p_page===0?true:false
-
                 }
-//                Datasteplist{
-//                    visible: p_page===0?false:true
-//                }
             }
             Rectangle{
                 width: 80
                 height: parent.height
-                color:"#f2f1f0"
+                color:"#00000000"//"#f2f1f0"
                 ColumnLayout{
                     x:10
                     y:10
@@ -74,7 +57,7 @@ Rectangle {
                             width:50
                             height:width
                             anchors.horizontalCenter: parent.horizontalCenter
-                            source: "./png/P2-UP.png"
+                            source: "../png/P2-UP.png"
                         }
                         onClicked:{
                             topleftRec.pageup()
@@ -98,9 +81,9 @@ Rectangle {
                     Repeater {
                         model: ListModel {
                             id: listModel
-                            ListElement { title: "新建";   source: "./png/new.png" }
-                            ListElement { title: "删除";   source: "./png/delete.png" }
-                            ListElement { title: "复制";   source: "./png/copy.png" }
+                            ListElement { title: "新建";   source: "../png/new.png" }
+                            ListElement { title: "删除";   source: "../png/delete.png" }
+                            ListElement { title: "复制";   source: "../png/copy.png" }
                             //ListElement { title: "粘贴";   source: "P1-MANUmini.png" }
                         }
 
@@ -162,7 +145,7 @@ Rectangle {
                             width:50
                             height:width
                             anchors.horizontalCenter: parent.horizontalCenter
-                            source: "./png/P2-DOWN.png"
+                            source: "../png/P2-DOWN.png"
                         }
                         onClicked:{
                             topleftRec.pagedown()

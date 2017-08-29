@@ -4,21 +4,21 @@ import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 import Qt.labs.settings 1.0
 //import QtQuick.Dialogs 1.2
-import Dataplugins 1.0
+//import Dataplugins 1.0
 Rectangle{
     id:mpane
     anchors.fill: parent
-    color: "#f2f1f0"
+    color: "#00000000"//"#f2f1f0"
     //Material.foreground: //Material.blue
     //Material.background: "lightblue"//Material.green
     property int mwidth:920
-    property int selectx:0//当前选中行索引
+
     function test(){
         mDatajson.id_changedown(2);
     }
 
     function pageup(){
-        selectx = 0;
+        mDatajson.selectindex = 0;
         mDatajson.pageup();
     }
     function datanew(){
@@ -26,16 +26,16 @@ Rectangle{
     }
 
     function sqldelete(){
-        var sid = (mDatajson.pagenum-1)*8+selectx;//选中数据id
-        if(mDatajson.pagenum==Math.ceil(mDatajson.databasenum/8)){//如果是最后一页
-            if(mDatajson.databasenum%8<=selectx+1){//如果当前selectx超出最后一页数据个数
-                if(selectx==0){
-                    //selectx = 7;
+        var sid = (mDatajson.pagenum-1)*8+mDatajson.selectindex;//选中数据id
+        if(mDatajson.pagenum===Math.ceil(mDatajson.databasenum/8)){//如果是最后一页
+            if(mDatajson.databasenum%8<=mDatajson.selectindex+1){//如果当前mDatajson.selectindex超出最后一页数据个数
+                if(mDatajson.selectindex==0){
+                    //mDatajson.selectindex = 7;
                     mDatajson.pageup();
-                    selectx = 7;
+                    mDatajson.selectindex = 7;
                 }
                 else{
-                    selectx = selectx - 1;
+                    mDatajson.selectindex = mDatajson.selectindex - 1;
                 }
             }
         }
@@ -43,17 +43,17 @@ Rectangle{
     }
 
     function copy(){
-        mDatajson.minsert((mDatajson.pagenum-1)*8+selectx);
-        if(selectx==7){
+        mDatajson.minsert((mDatajson.pagenum-1)*8+mDatajson.selectindex);
+        if(mDatajson.selectindex==7){
             pagedown();
         }
         else{
-            selectx = selectx+1;
+            mDatajson.selectindex = mDatajson.selectindex+1;
         }
     }
 
     function pagedown(){
-        selectx = 0;
+        mDatajson.selectindex = 0;
         mDatajson.pagedown();
     }
     ListModel {
@@ -74,7 +74,7 @@ Rectangle{
         id:topRow
         width:mwidth
         height: 37
-        x:15
+        x:10
         Repeater {
             id:repeater
             model:headerModel
@@ -87,14 +87,14 @@ Rectangle{
         }
     }
 
-    Data{
-        type:0
-        id:mDatajson
-        Component.onCompleted:{
-            //dataLoader.source = "ListViewLoader.qml"
-            dataLoader.sourceComponent=loaderRect
-        }
-    }
+//    Data{
+//        type:0
+//        id:mDatajson
+//        Component.onCompleted:{
+//            //dataLoader.source = "ListViewLoader.qml"
+//            dataLoader.sourceComponent=loaderRect
+//        }
+//    }
 
     Item{
         width: 920
@@ -105,6 +105,10 @@ Rectangle{
             //anchors.fill: parent
 
             //sourceComponent: loaderRect
+        }
+        Component.onCompleted: {
+            //mDatajson.
+            dataLoader.sourceComponent = loaderRect
         }
       }
     Component{
@@ -126,7 +130,6 @@ Rectangle{
         contentItem: Rectangle {
             id: settingsColumn
             //color:"lightskyblue"
-
             Label {
                 height: 50
                 id:topstyle
@@ -179,7 +182,5 @@ Rectangle{
             }
         }
     }
-
-
 }
 

@@ -7,12 +7,12 @@ import "qrc:/MaterialUI/"
 import "qrc:/MaterialUI/Interface/"
 import QtQuick.Controls.Material 2.0
 import Qt.labs.settings 1.0
-import Startplugins 1.0
+
 Rectangle {
     id: root
     width: p_width; height: p_height;
-    property variant p_width
-    property variant p_height
+//    property variant p_width
+//    property variant p_height
     property string g_y1Data:"200.0"
     property string g_y1Data1:"255.0"
     property string g_y2Data:"200.1"
@@ -325,21 +325,6 @@ Rectangle {
                     }
                 }
             }
-            //           Rectangle{
-
-            Image {
-                width: parent.width/5*2-120
-                x:670
-                anchors.topMargin: 30
-                anchors.bottomMargin: 0
-                // anchors.right: parent.right
-                height: parent.height-60
-                //anchors.fill: parent
-                id: bendImage
-                // source: "./png/bottommouldpic.png"
-                source: "./png/logo.png"
-            }
-            // }
 
         }
     }

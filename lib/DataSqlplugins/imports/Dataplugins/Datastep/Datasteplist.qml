@@ -151,8 +151,6 @@ Rectangle{
                 height:parent.height
                 text:name
                 font.pixelSize: 13
-                //font.bold: true
-                //highlighted: true
             }
         }
     }

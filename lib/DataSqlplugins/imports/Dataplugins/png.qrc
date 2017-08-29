@@ -8,5 +8,6 @@
         <file>png/lbottommouldpic.png</file>
         <file>png/ltopmouldpic.png</file>
         <file>png/mouldpic.png</file>
+        <file>Main.qml</file>
     </qresource>
 </RCC>

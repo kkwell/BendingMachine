@@ -5,7 +5,7 @@ import QtQuick.Controls 2.0
 Rectangle{
     width: 920
     height: parent.height
-
+    color:"#00000000"
     function setlrepeatermodel(jsonData,ourIndex){
         lrepeatermodel.setProperty(0, "test", jsonData.name)
         lrepeatermodel.setProperty(1, "test", jsonData.topmould)
@@ -22,7 +22,7 @@ Rectangle{
         width: 920
         height: parent.height
         //anchors.top: topRow.bottom
-        x:15
+        x:10
         Rectangle{
             width:parent.width
             height:240
@@ -34,7 +34,7 @@ Rectangle{
                 height: 240
                 clip: true
                 model: mDatajson
-                currentIndex:selectx
+                currentIndex:mDatajson.selectindex
                 focus:true
                 //highlightRangeMode:ListView.StrictlyEnforceRange
                 delegate: Loader {
@@ -45,7 +45,7 @@ Rectangle{
                     property ListView view: listView
                     property int ourIndex: index
                     property var jsonData: json
-                    property int selectIndex: selectx
+                    //property int mDatajson.selectindex: mDatajson.selectindex
 
                     // Can't find a way to do this in the SwipeDelegate component itself,
                     // so do it here instead.
@@ -92,7 +92,9 @@ Rectangle{
             }
 
         }
+
         Grid {
+            id:mgrid
             x:110
             y:30
             width: parent.width
@@ -102,26 +104,15 @@ Rectangle{
             rows: 5
             columns: 2
 
+
             Repeater {
                 id:lrepeater
-                model:ListModel{
-                    id:lrepeatermodel
-                    ListElement { name: "名 称";     tip:"TextField"  ;test:"";unit:""}
-                    ListElement { name: "上 模";     tip:"TextField" ;test:"";unit:""}
-                    ListElement { name: "板 宽";     tip:"00.00"  ;test:"" ;unit:" mm"}
-                    ListElement { name: "下 模";     tip:"TextField"  ;test:"";unit:""}
-                    ListElement { name: "板 厚";     tip:"00.00"  ;test:"";unit:" mm"}
-                    ListElement { name: "上死点";    tip:"00.00"  ;test:"";unit:" mm"}
-                    ListElement { name: "材 料";     tip:"TextField"  ;test:"";unit:""}
-                    ListElement { name: "转速点";    tip:"00.00"  ;test:"";unit:" mm"}
-                    ListElement { name: "夹紧点";    tip:"00.00"  ;test:"";unit:" mm"}
-                }
+                model:lrepeatermodel
 
                 Rectangle{
                     width:300
                     height:30
                     color:mpane.color
-
                     Label {
                         id:firstname
                         width: 65
@@ -130,26 +121,57 @@ Rectangle{
                         font.pixelSize: 18
                     }
                     TextField {
-                        id:textname
+                        id:mtextfield
                         width: 100
-                        height: 40
+                        height: 42
                         placeholderText: tip
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         anchors.left: firstname.right
-                        font.pixelSize: 20
+                        font.pixelSize: 18
+                        text:ttest//mtextfield.activeFocus?mDatajson.editvalue:""
+                        onActiveFocusChanged: {
+                            if(mtextfield.activeFocus){
+                                mDatajson.editname = name
+                                mDatajson.editvalue = ttest
+                                mDatajson.myvalue = test
+                                mDatajson.symble = unit
+                                mDatajson.sqltitlename = sqlname
+                                //emit:returnClicked(test)
+                            }
+                        }
+                        onDisplayTextChanged: {
+                            mDatajson.editvalue = mtextfield.text
+                            //console.log(mfoc)
+                            //emit:returnClicked(textname.text)
+                        }
                     }
+
                     Label{
                         id:originvalue
                         width:100
                         height:35
-                        text:"   = "+test
+                        text:"   = "+test+"    "+unit
                         font.pixelSize: 18
-                        anchors.left: textname.right
+                        anchors.left: mtextfield.right
+                    }
+                }
+                Keys.onPressed: {
+                    if(index==8&&event.key===Qt.Key_Tab){
+                        console.log("tab")
+                        //lrepeater.itemAt(0).mtextfield.focus = true
+                        //lrepeatermodel.setProperty(0, "mfoc", true)
+                        //mtextfield.
+                        mtextfield.onActiveFocusChanged()
+
                     }
                 }
             }
+
+
         }
+
+
     }
 
     Component {
@@ -262,12 +284,12 @@ Rectangle{
                 id:mClickedArea
                 anchors.fill: parent
                 onClicked:{
-                    selectx = ourIndex;
+                    mDatajson.selectindex = ourIndex;
                     setlrepeatermodel(jsonData,ourIndex);
                     //                listView.remove.objectName("id");
                     //                mDatajson.minsert(2);//mDatajson
 
-                    //mDatajson.setData(mDatajson.index(ourIndex,0),"fe",0)
+                    //mDatajson.setData(mDatajson.index(ourIndex,0),"fe",1)
                 }
             }
             Component.onCompleted:{

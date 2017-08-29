@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Datalist/ListViewLoader.qml</file>
+        <file>Datalist/Datalist.qml</file>
+        <file>Datalist/Data.qml</file>
+        <file>Datastep/Datasteplist.qml</file>
+        <file>Datastep/Datastep.qml</file>
+        <file>Mouldlist/Mouldpage.qml</file>
+        <file>StartBending/StartBending.qml</file>
+    </qresource>
+</RCC>

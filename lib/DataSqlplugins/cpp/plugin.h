@@ -23,7 +23,12 @@ class BendingProgram : public QAbstractListModel
     Q_PROPERTY(int pagenum READ pagenum WRITE setPagenum NOTIFY pagenumChanged)
     Q_PROPERTY(int selectindex READ selectindex WRITE setselectIndex NOTIFY selectIndexChanged)
     Q_PROPERTY(int type READ type WRITE settype NOTIFY typeChanged)
-
+    //keyboard
+    Q_PROPERTY(QString editname READ editname WRITE seteditname NOTIFY editnameChanged)
+    Q_PROPERTY(QString editvalue READ editvalue WRITE seteditvalue NOTIFY editvalueChanged)
+    Q_PROPERTY(QString myvalue READ myvalue WRITE setmyvalue NOTIFY myvalueChanged)
+    Q_PROPERTY(QString symble READ symble WRITE setsymble NOTIFY symbleChanged)
+    Q_PROPERTY(QString sqltitlename READ sqltitlename WRITE setsqltitlename NOTIFY sqltitlenameChanged)
 public:
     explicit BendingProgram(QObject *parent = 0);
     ~BendingProgram()
@@ -47,7 +52,6 @@ public:
         JsonRole = Qt::UserRole + 1,
         NameRole,            // name
         EdittimeRole,                                // age
-
     };
 
     QHash<int, QByteArray> roleNames() const;
@@ -67,9 +71,6 @@ public:
     bool selectsql(int &seeknum,QString &pagename,int &maxnum);
     void getsqlnum();//获得数据库总数:m_databasenum
 
-
-
-
     QString getidData();
     void setidData(QString str);
     int databasenum();
@@ -82,6 +83,17 @@ public:
     int type();
     void settype(int n);
 
+    QString editname();
+    void seteditname(QString str);
+    QString editvalue();
+    void seteditvalue(QString str);
+    QString myvalue();
+    void setmyvalue(QString str);
+    QString symble();
+    void setsymble(QString str);
+    QString sqltitlename();
+    void setsqltitlename(QString str);
+
 signals:
     //void typeChanged();
     void idDataChanged();
@@ -89,8 +101,13 @@ signals:
     void pagenumChanged();
     void selectIndexChanged();
     void typeChanged();
-    //protected:
 
+    void editnameChanged();
+    void editvalueChanged();
+    void myvalueChanged();
+    void symbleChanged();
+    void sqltitlenameChanged();
+    //protected:
 
 private:
     int xnum;
@@ -106,6 +123,12 @@ private:
     QString databasepagename;
     QSqlDatabase database;
     QSqlQuery *sql_query;
+
+    QString m_editname;
+    QString m_editvalue;
+    QString m_myvalue;
+    QString m_symble;
+    QString m_sqltitlename;
 };
 #endif // PLUGIN
 

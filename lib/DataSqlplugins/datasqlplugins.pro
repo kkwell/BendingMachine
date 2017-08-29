@@ -14,12 +14,14 @@ SOURCES += \
 
 pluginfiles.files += \
     imports/Dataplugins/qmldir \
-    imports/Dataplugins/Data.qml \
-    imports/Dataplugins/Datalist.qml \
-    imports/Dataplugins/Datastep.qml \
-    imports/Dataplugins/Datasteplist.qml \
-    imports/Dataplugins/ListViewLoader.qml \
-    imports/Dataplugins/Mouldpage.qml
+    imports/Dataplugins/Main.qml \
+    imports/Dataplugins/Datalist/Data.qml \
+    imports/Dataplugins/Datalist/Datalist.qml \
+    imports/Dataplugins/Datalist/ListViewLoader.qml \
+    imports/Dataplugins/Datastep/Datastep.qml \
+    imports/Dataplugins/Datastep/Datasteplist.qml \
+    imports/Dataplugins/Mouldlist/Mouldpage.qml \
+    imports/Dataplugins/StartBending/StartBending.qml
 
 qml.files = plugins.qml
 qml.path += $$PWD/
@@ -36,4 +38,5 @@ INSTALLS += target qml pluginfiles
 CONFIG += install_ok  # Do not cargo-cult this!
 
 RESOURCES += \
-    imports/Dataplugins/png.qrc
+    imports/Dataplugins/png.qrc \
+    imports/Dataplugins/qml.qrc

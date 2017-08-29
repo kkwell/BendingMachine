@@ -98,12 +98,14 @@ Qt::ItemFlags  BendingProgram::flags(const QModelIndex &index) const
 
 bool BendingProgram::setData(const QModelIndex &index,const QVariant &value, int role)
 {
-    Q_UNUSED(value)
+    //Q_UNUSED(value)
     Q_UNUSED(role)
+    QString str = value.toString();
+    qDebug()<<m_selectIndex<<m_sqltitlename<<role<<str;
     if (index.isValid()) {
-        JsonData[1].remove("id");
+        //JsonData[1].remove("id");
         //JsonData[1].insert("id",55);
-        JsonData[index.row()].insert("name","what's that");
+        JsonData[index.row()].insert("name",str);
 
         qDebug()<<JsonData[0];
         emit  dataChanged(index, index);
@@ -342,7 +344,7 @@ void BendingProgram::getsqlnum()
             }
             setDatabasenum(m_databasenum);
             setPagenum(m_pagenum);
-            qDebug()<<"总数:"<<m_databasenum<<"页码:"<<m_pagenum<<"当前页面数据个数:"<<pagedatanum;
+            qDebug()<<"m_databasenum:"<<m_databasenum<<"m_pagenum:"<<m_pagenum<<"pagedatanum:"<<pagedatanum;
         }
     }
 }
@@ -612,6 +614,7 @@ void BendingProgram::settype(int n)//数据库界面初始化
 {
     m_type = n;
     int num;
+    qDebug()<<"type:"<<n;
     switch(n)
     {
     case 0:
@@ -669,9 +672,9 @@ void BendingProgram::pagedown()
         num = (m_pagenum-1)*listviewpagenum;
         selectsql(num,databasepagename,pagedatanum);
         setPagenum(m_pagenum);
-
     }
 }
+
 void BendingProgram::pageup()
 {
     int num = ceil(double(m_databasenum)/listviewpagenum);
@@ -732,6 +735,47 @@ void BendingProgram::setselectIndex(int n)
 {
     m_selectIndex = n;
     emit selectIndexChanged();
+}
+
+QString BendingProgram::editname(){
+    return  m_editname;
+}
+
+void BendingProgram::seteditname(QString str){
+    m_editname = str;
+    emit editnameChanged();
+}
+QString BendingProgram::editvalue(){
+    return m_editvalue;
+}
+
+void BendingProgram::seteditvalue(QString str){
+    m_editvalue = str;
+    emit editvalueChanged();
+}
+
+QString BendingProgram::myvalue(){
+    return m_myvalue;
+}
+
+void BendingProgram::setmyvalue(QString str){
+    m_myvalue = str;
+    emit myvalueChanged();
+}
+QString BendingProgram::symble(){
+    return m_symble;
+}
+
+void BendingProgram::setsymble(QString str){
+    m_symble = str;
+    emit symbleChanged();
+}
+QString BendingProgram::sqltitlename(){
+    return m_sqltitlename;
+}
+void BendingProgram::setsqltitlename(QString str){
+    m_sqltitlename = str;
+    emit sqltitlenameChanged();
 }
 
 //signals:

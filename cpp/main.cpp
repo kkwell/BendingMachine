@@ -6,7 +6,7 @@
 #include <QFile>
 #include <QDebug>
 #include <stdio.h>
-
+//#include <bpiserial.h>
 //#define RASPBERRY
 
 int main(int argc, char *argv[])
@@ -25,6 +25,8 @@ int main(int argc, char *argv[])
     //else
     //QQuickStyle::setStyle(settings.value("style").toString());
     QQuickStyle::setStyle("Material");
+    //qmlRegisterType<BpiSerial>("BpiSerialType", 1, 0, "Serial");
+    //qmlRegisterType<TimeModel>("Datetime",1,0,"Time");
     QQmlApplicationEngine engine;
     //engine.addImportPath("/root/BendingMachine/export/lib/qmllib");
     QString path=QCoreApplication::applicationDirPath();
@@ -34,14 +36,17 @@ int main(int argc, char *argv[])
     qDebug()<<"system:MACOS";
     engine.addImportPath("../../../lib/DataSqlplugins/imports/");
     engine.addImportPath("../../../lib/Startplugins/imports/");
+    engine.addImportPath("./lib/keyboard/imports/");
 #elif defined(Q_OS_LINUX)
     qDebug()<<"system:LINUX";
     engine.addImportPath("./lib/DataSqlplugins/imports/");
     engine.addImportPath("./lib/Startplugins/imports/");
+    engine.addImportPath("./lib/keyboard/imports/");
 #elif defined(Q_OS_WIN)
     qDebug()<<"system:WIN";
     engine.addImportPath("./lib/DataSqlplugins/imports/");
     engine.addImportPath("./lib/Startplugins/imports/");
+    engine.addImportPath("./lib/keyboard/imports/");
 #endif
 
     engine.load(QUrl("qrc:/main.qml"));

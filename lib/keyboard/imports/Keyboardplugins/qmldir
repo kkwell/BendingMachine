@@ -1,0 +1,3 @@
+module Keyboardplugins
+Keyboard 1.0 Keyboard.qml
+plugin keyboardplugins

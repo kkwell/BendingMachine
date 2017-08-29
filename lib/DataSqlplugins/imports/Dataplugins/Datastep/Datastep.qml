@@ -11,12 +11,12 @@ import Qt.labs.settings 1.0
 Rectangle {
     id: root
     width: p_width; height: p_height;
-    property variant p_width
-    property variant p_height
-    property string ggp:"fef"
+//    property variant p_width
+//    property variant p_height
+//    property variant mDatajson
     //signal
 
-    signal returnClicked(variant type);
+    //signal returnClicked(variant type);
 
     //function
 
@@ -26,28 +26,15 @@ Rectangle {
 
     Component.onCompleted:{
         //numColumn.setAlignment(AlignCenter)
-        //log(p_page)
+        log("Datastep Completed")
 
     }
     Column{
         anchors.fill:parent
 
-        Rectangle{
-            id:topRec
-            width: parent.width
-            height: 60
-            color:"#f2f1f0"
-            Text{
-                text:"工序"
-                font.pixelSize: 25
-                x:20
-                y:20
-            }
-        }
-
         Row{
             width: parent.width
-            height: parent.height-topRec.height
+            height: parent.height//-topRec.height
             Rectangle{
                 width: parent.width-80
                 height: parent.height
@@ -73,7 +60,7 @@ Rectangle {
                             width:50
                             height:width
                             anchors.horizontalCenter: parent.horizontalCenter
-                            source: "./png/P2-UP.png"
+                            source: "../png/P2-UP.png"
                         }
                         onClicked:{
 
@@ -97,9 +84,9 @@ Rectangle {
                     Repeater {
                         model: ListModel {
                             id: listModel
-                            ListElement { title: "新建";   source: "./png/new.png" }
-                            ListElement { title: "删除";   source: "./png/delete.png" }
-                            ListElement { title: "复制";   source: "./png/copy.png" }
+                            ListElement { title: "新建";   source: "../png/new.png" }
+                            ListElement { title: "删除";   source: "../png/delete.png" }
+                            ListElement { title: "复制";   source: "../png/copy.png" }
                             //ListElement { title: "粘贴";   source: "P1-MANUmini.png" }
                         }
 
@@ -146,7 +133,7 @@ Rectangle {
                             width:50
                             height:width
                             anchors.horizontalCenter: parent.horizontalCenter
-                            source: "./png/P2-DOWN.png"
+                            source: "../png/P2-DOWN.png"
                         }
                         onClicked:{
 
